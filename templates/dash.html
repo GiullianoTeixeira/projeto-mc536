@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaData - Dashboard</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Custom styling for the search results box */
+    .dashboard-card {
+      max-width: 800px;
+      margin: 10vh auto;
+    }
+    .search-results {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .waterbody-card {
+      margin-bottom: 20px;
+    }
+    .waterbody-item {
+      display: flex;
+      align-items: center;
+    }
+    .waterbody-item img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      margin-right: 15px;
+    }
+    .waterbody-item h5 {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-10 col-lg-8">
+        <div class="card dashboard-card shadow">
+          <div class="card-body">
+            <h2 class="text-center mb-4">AquaData</h2>
+            <h3 class="text-center mb-4">Search Water Bodies</h3>
+            
+            <!-- Search Bar -->
+            <div class="mb-4">
+              <form class="d-flex" id="searchForm">
+                <input class="form-control me-2" type="search" placeholder="Search for water bodies..." aria-label="Search" id="searchInput">
+                <button class="btn btn-primary" type="submit">Search</button>
+              </form>
+            </div>
+
+            <!-- Search Results Box -->
+            <div class="search-results">
+              
+              <!-- Waterbody Card 1 -->
+              <div class="card waterbody-card shadow">
+                <div class="card-body waterbody-item">
+                  <img src="https://via.placeholder.com/100" alt="Amazon River">
+                  <div>
+                    <a href="/waterbody/1" class="text-decoration-none">
+                      <h5>Amazon River</h5>
+                      <p>Location: Brazil, South America</p>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Waterbody Card 2 -->
+              <div class="card waterbody-card shadow">
+                <div class="card-body waterbody-item">
+                  <img src="https://via.placeholder.com/100" alt="Lake Victoria">
+                  <div>
+                    <a href="/waterbody/2" class="text-decoration-none">
+                      <h5>Lake Victoria</h5>
+                      <p>Location: Africa</p>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Waterbody Card 3 -->
+              <div class="card waterbody-card shadow">
+                <div class="card-body waterbody-item">
+                  <img src="https://via.placeholder.com/100" alt="Great Barrier Reef">
+                  <div>
+                    <a href="/waterbody/3" class="text-decoration-none">
+                      <h5>Great Barrier Reef</h5>
+                      <p>Location: Australia</p>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Placeholder for future search functionality
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const query = document.getElementById('searchInput').value;
+      alert('Searching for: ' + query);
+      
+      // Future implementation: Fetch search results from the server and display them
+    });
+  </script>
+</body>
+</html>
