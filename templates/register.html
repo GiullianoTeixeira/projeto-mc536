@@ -41,15 +41,19 @@
               <div id="pfFields">
                 <div class="mb-3">
                   <label for="cpf" class="form-label">CPF</label>
-                  <input type="text" class="form-control" id="cpf" name="cpf" placeholder="Enter CPF">
+                  <input type="text" class="form-control" id="cpf" name="cpf" placeholder="Enter CPF" value="{{ request.form.cpf }}">
+                </div>
+                <div class="mb-3">
+                  <label for="passwordPF" class="form-label">Password</label>
+                  <input type="password" class="form-control" id="passwordPF" name="passwordPF" placeholder="Enter password" value="{{ request.form.passwordPF }}">
                 </div>
                 <div class="mb-3">
                   <label for="name" class="form-label">Name</label>
-                  <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name">
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" value="{{ request.form.name }}">
                 </div>
                 <div class="mb-3">
                   <label for="dob" class="form-label">Date of Birth</label>
-                  <input type="date" class="form-control" id="dob" name="dob">
+                  <input type="date" class="form-control" id="dob" name="dob" value="{{ request.form.dob }}">
                 </div>
               </div>
 
@@ -57,11 +61,19 @@
               <div id="pjFields" style="display: none;">
                 <div class="mb-3">
                   <label for="cnpj" class="form-label">CNPJ</label>
-                  <input type="text" class="form-control" id="cnpj" name="cnpj" placeholder="Enter CNPJ">
+                  <input type="text" class="form-control" id="cnpj" name="cnpj" placeholder="Enter CNPJ" value="{{ request.form.cnpj }}">
+                </div>
+                <div class="mb-3">
+                  <label for="passwordPJ" class="form-label">Password</label>
+                  <input type="password" class="form-control" id="passwordPJ" name="passwordPJ" placeholder="Enter password" value="{{ request.form.passwordPJ }}">
                 </div>
                 <div class="mb-3">
                   <label for="razaoSocial" class="form-label">Razão Social</label>
-                  <input type="text" class="form-control" id="razaoSocial" name="razaoSocial" placeholder="Enter razão social">
+                  <input type="text" class="form-control" id="razaoSocial" name="razaoSocial" placeholder="Enter razão social" value="{{ request.form.razaoSocial }}">
+                </div>
+                <div class="mb-3">
+                  <label for="representante" class="form-label">Representante</label>
+                  <input type="text" class="form-control" id="representante" name="representante" placeholder="Enter representante" value="{{ request.form.representative }}">
                 </div>
                 <div class="mb-3 form-check">
                   <input type="checkbox" class="form-check-input" id="govInstitution" name="govInstitution">
