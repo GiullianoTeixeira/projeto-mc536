@@ -128,7 +128,9 @@ def waterbody(waterbody_id):
     ph_stats, 
     denuncias_por_severidade
     ) = useful_queries.get_waterbodydata_by_id(connection, waterbody_id)
+    
 
+    user_type = useful_queries.get_user_type_by_id(current_user.id)
     connection.close()
 
     return render_template(
@@ -138,7 +140,8 @@ def waterbody(waterbody_id):
         count_reports=count_reports,
         media_indice_biodiversidade=media_indice_biodiversidade,
         ph_stats=ph_stats,
-        denuncias_por_severidade=denuncias_por_severidade
+        denuncias_por_severidade=denuncias_por_severidade,
+        user_type=user_type
     )
 
 if __name__ == '__main__':
