@@ -5,7 +5,13 @@
         <title>Waterbody Details</title>
     </head>
     <body>
+        {% include 'header.html' %} 
         <h1>{{ waterbody.nome }}</h1>
+        {% if user_type == 'pf' %}
+            <button type="button">You are PF</button>
+        {% elif user_type == 'pj' %}
+            <button type="button">You are PJ</button>
+        {% endif %}
         <p>Coordinates: {{ waterbody.coordenadas }}</p>
         <img src="{{ waterbody.imagemUrl }}" alt="Image of {{ waterbody.nome | default('waterbody') }}">
         <h2>Quantidade de Denúncias</h2>
