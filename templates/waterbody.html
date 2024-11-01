@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Waterbody Details</title>
+    </head>
+    <body>
+        <h1>{{ waterbody.nome }}</h1>
+        <p>Coordinates: {{ waterbody.coordenadas }}</p>
+        <img src="{{ waterbody.imagemUrl }}" alt="Image of {{ waterbody.nome | default('waterbody') }}">
+        <h2>Quantidade de Denúncias</h2>
+        <p>Total de Denúncias: {{ count_complaints}}</p>
+        <h2>Denúncias por Severidade</h2>
+        <table>
+            <tr>
+                <th>Severidade</th>
+                <th>Número de Denúncias</th>
+            </tr>
+            {% for item in denuncias_por_severidade %}
+            <tr>
+                <td>{{ item['Severidade'] }}</td>
+                <td>{{ item['Número de Denúncias'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2>Relatórios</h2>
+        <p>Total de Relatórios: {{ count_reports }}</p>
+
+        <h2>Média do Índice de Biodiversidade</h2>
+        {% if media_indice_biodiversidade %}
+        <p>{{ media_indice_biodiversidade['Nome do Corpo de Água'] }}: {{ media_indice_biodiversidade['Média do Índice de Biodiversidade'] }}</p>
+        {% else %}
+        <p>Nenhum índice disponível.</p>
+        {% endif %}
+
+        <h2>Estatísticas de pH</h2>
+        {% if ph_stats %}
+        <p>{{ ph_stats['Nome do Corpo de Água'] }}: pH Mínimo: {{ ph_stats['pH Mínimo'] }}, pH Médio: {{ ph_stats['pH Médio'] }}, pH Máximo: {{ ph_stats['pH Máximo'] }}</p>
+        {% else %}
+        <p>Nenhuma estatística de pH disponível.</p>
+        {% endif %}
+
+    </body>
+</html>
