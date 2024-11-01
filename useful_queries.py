@@ -155,3 +155,22 @@ def get_denuncias_por_severidade(corpo_id):
     cursor.close()
     connection.close()
     return severidade_counts  # Return counts by severity
+
+def get_user_type_by_id(user_id):
+    connection = app.get_db()
+    if not connection:
+        return []  # Return an empty list if connection fails
+    
+    cursor = connection.cursor(dictionary=True)  # Use dictionary for named columns
+    
+    cursor.execute(
+        "SELECT tipo FROM Usuario WHERE id = %s", 
+        (user_id,))
+    
+    result = cursor.fetchone()  # Fetch one record
+    cursor.close()
+    connection.close()
+    
+    if result:
+        return result['tipo']  # Return the user type
+    return None  # Return None if no user found
