@@ -70,6 +70,7 @@ def login_handler():
         if user is not None and user.password == request.form.get("password"):
             # Use the login_user method to log in the user
             login_user(user)
+            session['user_id'] = user.id
             return redirect(url_for("test"))
         else:
             return "Login failed"
@@ -102,8 +103,19 @@ def register():
             
     elif request.method == "GET":
         return render_template("register.html")
+    
+@app.context_processor
+def inject_user_id():
+    return dict(user_id=current_user.id if current_user.is_authenticated else None)
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
 @app.route('/waterbody/<int:waterbody_id>', methods=['GET'])
+@login_required  
 def waterbody(waterbody_id):
     
     connection = get_db()
