@@ -43,29 +43,22 @@ def close_db(error):
 def load_user(user_id):
     return model.get_user_by_id(get_db(), user_id)
 
+@login_manager.unauthorized_handler
+def unauthorized():
+    flash("You must be logged in to access this page", "danger")
+    return redirect(url_for('login'))
+
 @app.route('/')
 def login():
     return render_template('login.html')
-
-@app.route('/test')
-@login_required
-def test():
-    db = get_db()
-    cursor = db.cursor()
-    cursor.execute('SELECT * FROM Usuario')
-    users = cursor.fetchall()
-    cursor.close()
-    print(current_user)
-    return "Done"
 
 @app.route("/login", methods=["GET", "POST"])
 def login_handler():
     if request.method == "POST":
         user = model.get_user_by_id(get_db(), request.form.get("username"))
         if user is not None and user.password == request.form.get("password"):
-            # Use the login_user method to log in the user
             login_user(user)
-            return redirect(url_for("test"))
+            return redirect(url_for("search"))
         else:
             return "Login failed"
         
@@ -91,13 +84,23 @@ def register():
             is_govt = True if request.form.get("govInstitution") == 'on' else False
             user = model.UserPJ(id, password, razao_social, representative, is_govt)
         
-        print(user)
         model.create_user(get_db(), user)
-        return "ok"
+        flash("Registration successful!", "success")
+
+        return render_template("login.html")
             
     elif request.method == "GET":
         return render_template("register.html")
 
+@app.route("/search", methods=["GET", "POST"])
+@login_required
+def search():
+    query = request.form.get("query", "")
+    results = []
+    if query:
+        results = model.search_waterbody_by_name(get_db(), query)
+    
+    return render_template("search.html", query=query, results=results)
 
 if __name__ == '__main__':
     app.run(debug=True)
