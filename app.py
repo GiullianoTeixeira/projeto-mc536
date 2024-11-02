@@ -19,6 +19,33 @@ app.config['MYSQL_USER'] = os.getenv('MYSQL_USER')
 app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
 app.config['MYSQL_DB'] = os.getenv('MYSQL_DB')
 
+####################################################################################################
+# TODO: Find suitable place for this
+from functools import wraps
+from flask import abort
+
+# Custom decorator to check if the user has the required role
+def role_required(role: model.UserRole):
+    def has_role(user: model.User, role: model.UserRole) -> bool:
+        if role == model.UserRole.PF:
+            return user.type == "PF"
+        elif role == model.UserRole.PJ_pv:
+            return user.type == "PJ" and not user.is_govt
+        elif role == model.UserRole.PJ_gov:
+            return user.type == "PJ" and user.is_govt
+        else:
+            return False
+
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if not current_user.is_authenticated or not has_role(current_user, role):
+                abort(403)  # Forbidden access
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
+####################################################################################################
+
 def get_db():
     if not hasattr(g, 'db') or not g.db.is_connected():
         try:

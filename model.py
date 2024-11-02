@@ -1,5 +1,11 @@
 from flask_login import UserMixin
 import mysql.connector
+from enum import Enum
+
+class UserRole(Enum):
+    PF = 'PF'
+    PJ_pv = 'PJ_pv'
+    PJ_gov = 'PJ_gov'
 
 class User(UserMixin):
     def __init__(self, id, password, type):
