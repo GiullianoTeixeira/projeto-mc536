@@ -31,8 +31,8 @@
             <tbody>
                 {% for complaint in waterbody.complaints %}
                 <tr>
-                    <td>{{ complaint.id }}</td>
-                    <td>{{ complaint.datahora }}</td>
+                    <td><a href="/waterbody/{{ waterbody.waterbody['id'] }}/complaint/{{ complaint.id }}">{{ complaint.id }}</a></td>
+                    <td><a href="/waterbody/{{ waterbody.waterbody['id'] }}/complaint/{{ complaint.id }}">{{ complaint.datahora }}</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -49,10 +49,13 @@
                 </tr>
             </thead>
             <tbody>
+                <p style="color: red;">Talvez essa informacao n deveria estar aqui</p>
                 {% for report in waterbody.reports %}
                 <tr>
-                    <td>{{ report.id }}</td>
-                    <td>{{ report.datahora }}</td>
+                    <tr>
+                        <td><a href="/waterbody/{{ waterbody.waterbody['id'] }}/report/{{ report.id }}">{{ report.id }}</a></td>
+                        <td><a href="/waterbody/{{ waterbody.waterbody['id'] }}/report/{{ report.id }}">{{ report.datahora }}</a></td>
+                    </tr>
                 </tr>
                 {% endfor %}
             </tbody>
