@@ -1,6 +1,6 @@
-from flask_login import UserMixin
-import mysql.connector
-
+from flask import *
+from flask_login import *
+import useful_queries
 class User(UserMixin):
     def __init__(self, id, password, type):
         self.id = id
@@ -38,6 +38,45 @@ class WaterBody:
     
     def __repr__(self):
         return f"WaterBody(id='{self.id}', name='{self.name}', coords='{self.coords}', image_url='{self.image_url}')"
+
+class WaterBodySuperPage:
+    def __init__(self, waterbody, count_complaints, count_reports, 
+                 biodiversity_media_index, ph_stats, complaints_by_severity, user_type):
+        self.waterbody = waterbody
+        self.count_complaints = count_complaints
+        self.count_reports = count_reports
+        self.biodiversity_media_index = biodiversity_media_index
+        self.ph_stats = ph_stats
+        self.complaints_by_severity = complaints_by_severity
+        self.user_type = user_type
+    
+    def __repr__(self):
+        return (f"Water Body: {self.waterbody}"
+                f"Complaints Count: {self.count_complaints}"
+                f"Reports Count: {self.count_reports}"
+                f"Average Biodiversity Index: {self.media_indice_biodiversidade}"
+                f"pH Statistics: {self.ph_stats}"
+                f"Complaints by Severity: {self.denuncias_por_severidade}"
+                f"User Type: {self.user_type}")
+
+    
+class Complaint:
+    def __init__(self, complainer, date_time, referred_body, category, severity, description):
+        self.complainer = complainer
+        self.date_time = date_time
+        self.referred_body = referred_body
+        self.category = category
+        self.severity = severity
+        self.description = description
+        
+    def __repr__(self):
+        return (f"Complaint Details:\n"
+                f"Complainer: {self.complainer}\n"
+                f"Date and Time: {self.date_time}\n"
+                f"Referred Body: {self.referred_body}\n"
+                f"Category: {self.category}\n"
+                f"Severity: {self.severity}\n"
+                f"Description: {self.description}\n")
 
 def get_user_by_id(db, id) -> User:
     cursor = db.cursor()
@@ -81,3 +120,34 @@ def search_waterbody_by_name(db, name) -> list[WaterBody]:
 
     print(cursor.statement)
     return [WaterBody(*result) for result in results]
+
+def send_complaint_form(db, complaint):  
+    cursor = db.cursor()
+    cursor.execute("""
+        INSERT INTO Denuncia
+        (denunciante, datahora, corpoReferente, categoria, severidade, descricao) 
+        VALUES (%s, %s, %s, %s, %s, %s)
+    """, (complaint.complainer, complaint.date_time, complaint.referred_body, complaint.category, complaint.severity, complaint.description))
+    
+    db.commit()
+    cursor.close()
+
+def create_waterbody_super_page(db, waterbody_id):
+    (
+        waterbody, count_complaints, count_reports, biodiversity_media_index, ph_stats, complaints_by_severity
+    ) = useful_queries.get_waterbodydata_by_id(db, waterbody_id)
+    
+    user_type = useful_queries.get_user_type_by_id(current_user.id)
+    
+    waterbody_super_page = WaterBodySuperPage(waterbody, count_complaints, count_reports, biodiversity_media_index, ph_stats, complaints_by_severity, user_type)
+    
+    return waterbody_super_page
+
+def get_complaint(db, id):
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM Denuncia WHERE id = %s", (id,))
+    complaint = cursor.fetchone()
+
+    cursor.close()
+    
+    return complaint
