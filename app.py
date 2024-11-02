@@ -28,11 +28,11 @@ from flask import abort
 def role_required(role: model.UserRole):
     def has_role(user: model.User, role: model.UserRole) -> bool:
         if role == model.UserRole.PF:
-            return user.type == "PF"
+            return user.type == "pf"
         elif role == model.UserRole.PJ_pv:
-            return user.type == "PJ" and not user.is_govt
+            return user.type == "pj" and not user.is_govt
         elif role == model.UserRole.PJ_gov:
-            return user.type == "PJ" and user.is_govt
+            return user.type == "pj" and user.is_govt
         else:
             return False
 
@@ -175,6 +175,19 @@ def search():
         results = model.search_waterbody_by_name(get_db(), query)
     
     return render_template("search.html", query=query, results=results)
+
+@app.route("/solution/<int:solution_id>", methods=["GET", "POST"])
+@login_required
+def solution(solution_id, methods=["GET"]):
+    solution = model.get_solution_by_id(get_db(), solution_id)
+
+    issuing_entity = model.get_typed_user_by_id(get_db(), solution.issuing_entity)
+    solution.issuing_entity = f"{issuing_entity.razao_social} ({issuing_entity.id})"
+
+    referenced_waterbody = model.get_waterbody_by_id(get_db(), solution.referenced_waterbody)
+    solution.referenced_waterbody = f"{referenced_waterbody.name} ({referenced_waterbody.id})"
+
+    return render_template("solution.html", solution=solution)
 
 if __name__ == '__main__':
     app.run(debug=True)
