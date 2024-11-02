@@ -204,5 +204,18 @@ def simulation(simulation_id):
 
     return render_template("simulation.html", simulation=simulation)
 
+@app.route("/report/<int:report_id>", methods=["GET"])
+@login_required
+def report(report_id):
+    report = model.get_report_by_id(get_db(), report_id)
+
+    issuing_entity = model.get_typed_user_by_id(get_db(), report.issuing_entity)
+    report.issuing_entity = f"{issuing_entity.razao_social} ({issuing_entity.id})"
+
+    referenced_waterbody = model.get_waterbody_by_id(get_db(), report.referenced_waterbody)
+    report.referenced_waterbody = f"{referenced_waterbody.name} ({referenced_waterbody.id})"
+
+    return render_template("report.html", report=report)
+
 if __name__ == '__main__':
     app.run(debug=True)

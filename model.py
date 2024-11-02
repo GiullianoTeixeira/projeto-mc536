@@ -1,6 +1,7 @@
 from flask_login import UserMixin
 import mysql.connector
 from enum import Enum
+from datetime import datetime
 
 class UserRole(Enum):
     PF = 'PF'
@@ -66,6 +67,19 @@ class Simulation:
     
     def __repr__(self):
         return f"Simulation(id='{self.id}', issuing_entity='{self.issuing_entity}', referenced_waterbody='{self.referenced_waterbody}', severity='{self.severity}', description='{self.description}')"
+
+class Report:
+    def __init__(self, id: int, issuing_entity: str, datetime: datetime, referenced_waterbody: int, text: str, pH: float = None, biodiversity_index: int = None):
+        self.id = id
+        self.issuing_entity = issuing_entity
+        self.datetime = datetime
+        self.referenced_waterbody = referenced_waterbody
+        self.text = text
+        self.pH = pH
+        self.biodiversity_index = biodiversity_index
+    
+    def __repr__(self):
+        return f"Report(id='{self.id}', issuing_entity='{self.issuing_entity}', datetime='{self.datetime}', referenced_waterbody='{self.referenced_waterbody}', text='{self.text}', pH='{self.pH}', biodiversity_index='{self.biodiversity_index}')"
 
 def get_user_by_id(db, id) -> User:
     cursor = db.cursor()
@@ -147,7 +161,7 @@ def search_waterbody_by_name(db, name) -> list[WaterBody]:
     print(cursor.statement)
     return [WaterBody(*result) for result in results]
 
-def get_solution_by_id(db, id) -> str:
+def get_solution_by_id(db, id) -> Solution:
     cursor = db.cursor()
     cursor.execute('SELECT * FROM Solucao WHERE id = %s', (id,))
     solution = cursor.fetchone()
@@ -158,7 +172,7 @@ def get_solution_by_id(db, id) -> str:
         return Solution(*solution)
     return None
 
-def get_simulation_by_id(db, id) -> str:
+def get_simulation_by_id(db, id) -> Simulation:
     cursor = db.cursor()
     cursor.execute('SELECT * FROM Simulacao WHERE id = %s', (id,))
     simulation = cursor.fetchone()
@@ -167,4 +181,15 @@ def get_simulation_by_id(db, id) -> str:
     print(cursor.statement)
     if simulation:
         return Simulation(*simulation)
+    return None
+
+def get_report_by_id(db, id) -> Report:
+    cursor = db.cursor()
+    cursor.execute('SELECT * FROM Relatorio WHERE id = %s', (id,))
+    report = cursor.fetchone()
+    cursor.close()
+
+    print(cursor.statement)
+    if report:
+        return Report(*report)
     return None
