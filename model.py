@@ -18,22 +18,22 @@ class User(UserMixin):
 
 class UserPF(User):
     def __init__(self, id, password, name, date_of_birth):
-        super().__init__(id, password, 'PF')
+        super().__init__(id, password, 'pf')
         self.name = name
         self.date_of_birth = date_of_birth
 
     def __repr__(self):
-        return f"UserPF(id='{self.id}', password='{self.password}', name='{self.name}', date_of_birth='{self.date_of_birth}')"
+        return f"UserPF(id='{self.id}', password='{self.password}', type='{self.type}', name='{self.name}', date_of_birth='{self.date_of_birth}')"
 
 class UserPJ(User):
     def __init__(self, id: str, password: str, razao_social: str, representative: str, is_govt: bool):
-        super().__init__(id, password, 'PJ')
+        super().__init__(id, password, 'pj')
         self.razao_social = razao_social
         self.representative = representative
         self.is_govt = is_govt
 
     def __repr__(self):
-        return f"UserPJ(id='{self.id}', password='{self.password}', razao_social='{self.razao_social}', is_govt='{self.is_govt}')"
+        return f"UserPJ(id='{self.id}', password='{self.password}', type={self.type}, razao_social='{self.razao_social}', is_govt='{self.is_govt}')"
 
 class WaterBody:
     def __init__(self, id: int, name: str, coords: str, image_url: str):
@@ -55,6 +55,17 @@ class Solution:
     
     def __repr__(self):
         return f"Solution(id='{self.id}', issuing_entity='{self.issuing_entity}', referenced_waterbody='{self.referenced_waterbody}', budget='{self.budget}', description='{self.description}')"
+
+class Simulation:
+    def __init__(self, id: int, issuing_entity: str, referenced_waterbody: int, severity: str, description: str):
+        self.id = id
+        self.issuing_entity = issuing_entity
+        self.referenced_waterbody = referenced_waterbody
+        self.severity = severity
+        self.description = description
+    
+    def __repr__(self):
+        return f"Simulation(id='{self.id}', issuing_entity='{self.issuing_entity}', referenced_waterbody='{self.referenced_waterbody}', severity='{self.severity}', description='{self.description}')"
 
 def get_user_by_id(db, id) -> User:
     cursor = db.cursor()
@@ -88,6 +99,9 @@ def get_typed_user_by_id(db, id) -> User:
             cursor.close()
             return UserPJ(user[0], user[1], specific_data[1], specific_data[2], specific_data[3])
     return None
+
+def get_typed_user_by_nontyped_user(db, user: User) -> User:
+    return get_typed_user_by_id(db, user.id)
 
 def get_user_password(db, id) -> str:
     cursor = db.cursor()
@@ -142,4 +156,15 @@ def get_solution_by_id(db, id) -> str:
     print(cursor.statement)
     if solution:
         return Solution(*solution)
+    return None
+
+def get_simulation_by_id(db, id) -> str:
+    cursor = db.cursor()
+    cursor.execute('SELECT * FROM Simulacao WHERE id = %s', (id,))
+    simulation = cursor.fetchone()
+    cursor.close()
+
+    print(cursor.statement)
+    if simulation:
+        return Simulation(*simulation)
     return None

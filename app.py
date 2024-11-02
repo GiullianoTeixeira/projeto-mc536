@@ -27,6 +27,7 @@ from flask import abort
 # Custom decorator to check if the user has the required role
 def role_required(role: model.UserRole):
     def has_role(user: model.User, role: model.UserRole) -> bool:
+        print(user)
         if role == model.UserRole.PF:
             return user.type == "pf"
         elif role == model.UserRole.PJ_pv:
@@ -39,7 +40,7 @@ def role_required(role: model.UserRole):
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
-            if not current_user.is_authenticated or not has_role(current_user, role):
+            if not current_user.is_authenticated or not has_role(model.get_typed_user_by_nontyped_user(get_db(), current_user), role):
                 abort(403)  # Forbidden access
             return f(*args, **kwargs)
         return decorated_function
@@ -176,9 +177,9 @@ def search():
     
     return render_template("search.html", query=query, results=results)
 
-@app.route("/solution/<int:solution_id>", methods=["GET", "POST"])
+@app.route("/solution/<int:solution_id>", methods=["GET"])
 @login_required
-def solution(solution_id, methods=["GET"]):
+def solution(solution_id):
     solution = model.get_solution_by_id(get_db(), solution_id)
 
     issuing_entity = model.get_typed_user_by_id(get_db(), solution.issuing_entity)
@@ -188,6 +189,20 @@ def solution(solution_id, methods=["GET"]):
     solution.referenced_waterbody = f"{referenced_waterbody.name} ({referenced_waterbody.id})"
 
     return render_template("solution.html", solution=solution)
+
+@app.route("/simulation/<int:simulation_id>", methods=["GET"])
+@login_required
+@role_required(model.UserRole.PJ_pv)
+def simulation(simulation_id):
+    simulation = model.get_simulation_by_id(get_db(), simulation_id)
+
+    issuing_entity = model.get_typed_user_by_id(get_db(), simulation.issuing_entity)
+    simulation.issuing_entity = f"{issuing_entity.razao_social} ({issuing_entity.id})"
+
+    referenced_waterbody = model.get_waterbody_by_id(get_db(), simulation.referenced_waterbody)
+    simulation.referenced_waterbody = f"{referenced_waterbody.name} ({referenced_waterbody.id})"
+
+    return render_template("simulation.html", simulation=simulation)
 
 if __name__ == '__main__':
     app.run(debug=True)
