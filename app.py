@@ -106,6 +106,7 @@ def inject_user_id():
 @login_required
 def logout():
     logout_user()
+    flash("You have been logged out", "info")
     return redirect(url_for('login'))
 
 @app.route('/waterbody/<int:waterbody_id>', methods=['GET'])
