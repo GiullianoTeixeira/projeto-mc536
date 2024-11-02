@@ -3,7 +3,9 @@ from flask_login import *
 import mysql.connector
 import os
 from dotenv import load_dotenv
-import model, useful_queries
+import model
+from functools import wraps
+from flask import abort
 
 load_dotenv()
 
@@ -18,11 +20,6 @@ app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST')
 app.config['MYSQL_USER'] = os.getenv('MYSQL_USER')
 app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
 app.config['MYSQL_DB'] = os.getenv('MYSQL_DB')
-
-####################################################################################################
-# TODO: Find suitable place for this
-from functools import wraps
-from flask import abort
 
 # Custom decorator to check if the user has the required role
 def role_required(role: model.UserRole):
@@ -44,7 +41,6 @@ def role_required(role: model.UserRole):
             return f(*args, **kwargs)
         return decorated_function
     return decorator
-####################################################################################################
 
 def get_db():
     if not hasattr(g, 'db') or not g.db.is_connected():
@@ -60,7 +56,6 @@ def get_db():
             g.db = None
     
     return g.db
-
 
 @app.teardown_appcontext
 def close_db(error):
@@ -138,33 +133,12 @@ def logout():
 
 @app.route('/waterbody/<int:waterbody_id>', methods=['GET'])
 @login_required  
-def waterbody(waterbody_id):
+def waterbody_super_page(waterbody_id):
     
-    connection = get_db()
-    # Fetch waterbody details and related statistics
-    (
-    waterbody_data, 
-    count_complaints, 
-    count_reports, 
-    media_indice_biodiversidade, 
-    ph_stats, 
-    denuncias_por_severidade
-    ) = useful_queries.get_waterbodydata_by_id(connection, waterbody_id)
-    
-
-    user_type = useful_queries.get_user_type_by_id(current_user.id)
-    connection.close()
-    
-    return render_template(
-        "waterbody.html",
-        waterbody=waterbody_data,
-        count_complaints=count_complaints,
-        count_reports=count_reports,
-        media_indice_biodiversidade=media_indice_biodiversidade,
-        ph_stats=ph_stats,
-        denuncias_por_severidade=denuncias_por_severidade,
-        user_type=user_type
-    )
+    waterbody = model.create_waterbody_super_page(get_db(), waterbody_id)
+    print(waterbody.waterbody)
+    print(waterbody.complaints[0]['id'])
+    return render_template("waterbody.html", waterbody=waterbody)
 
 @app.route("/search", methods=["GET", "POST"])
 @login_required
@@ -203,18 +177,43 @@ def simulation(simulation_id):
 
     return render_template("simulation.html", simulation=simulation)
 
-@app.route("/report/<int:report_id>", methods=["GET"])
+@app.route("/waterbody/<int:waterbody_id>/report/<int:report_id>", methods=["GET"])
 @login_required
-def report(report_id):
+def report(waterbody_id, report_id):
     report = model.get_report_by_id(get_db(), report_id)
 
     issuing_entity = model.get_typed_user_by_id(get_db(), report.issuing_entity)
     report.issuing_entity = f"{issuing_entity.razao_social} ({issuing_entity.id})"
 
-    referenced_waterbody = model.get_waterbody_by_id(get_db(), report.referenced_waterbody)
+    referenced_waterbody = model.get_waterbody_by_id(get_db(), waterbody_id)
     report.referenced_waterbody = f"{referenced_waterbody.name} ({referenced_waterbody.id})"
 
     return render_template("report.html", report=report)
+
+@app.route('/complaint_form', methods=['GET', 'POST'])
+def complaint_form():
+    if request.method == 'POST':
+       
+        complainer = str(current_user.id) 
+        date_time = request.form['datahora']
+        referred_body = request.form['corpoReferente']
+        category = request.form['categoria']
+        severity = request.form['severidade']
+        description = request.form['descricao']
+        complaint = model.Complaint(complainer, date_time, referred_body, category, severity, description)
+        
+        model.send_complaint_form(get_db(), complaint)
+
+        return redirect(url_for('complaint_form'))
+
+    return render_template('complaint_form.html')
+
+@app.route('/waterbody/<int:waterbody_id>/complaint/<int:id>', methods=['GET'])
+def complaint(waterbody_id, id):
+    
+    complaint = model.get_complaint(get_db(), id)
+    
+    return render_template('complaint.html', complaint=complaint)
 
 if __name__ == '__main__':
     app.run(debug=True)
