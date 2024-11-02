@@ -6,7 +6,7 @@
     </head>
     <body>
         {% include 'header.html' %} 
-        <h1>{{ waterbody.waterbody[1] }}</h1>
+        <h1>{{ waterbody.waterbody['nome'] }}</h1>
 
         {% if waterbody.user_type == 'pf' %}
             <button type="button">You are PF</button>
@@ -14,28 +14,49 @@
             <button type="button">You are PJ</button>
         {% endif %}
 
-        <p>Coordinates: {{ waterbody.waterbody[2] }}</p>
-        <img src="{{ waterbody.waterbody[3] }}" alt="Image of {{ waterbody.waterbody[3] | default('waterbody') }}">
+        <p>Coordinates: {{ waterbody.waterbody['coordenadas'] }}</p>
+        <img src="{{ waterbody.waterbody['imagemUrl'] }}" alt="Image of {{ waterbody.waterbody['imagemUrl'] | default('waterbody') }}">
 
         <h2>Quantidade de Denúncias</h2>
-        <p>Total de Denúncias: {{ waterbody.count_complaints }}</p>
-
-        <h2>Denúncias por Severidade</h2>
+        <p>Total de Denúncias: {{ waterbody.complaints|length }}</p>
+        
+        <h2>Denúncias</h2>
         <table>
-            <tr>
-                <th>Severidade</th>
-                <th>Número de Denúncias</th>
-            </tr>
-            {% for item in waterbody.complaints_by_severity %}
-            <tr>
-                <td>{{ item['Severidade'] }}</td>
-                <td>{{ item['Número de Denúncias'] }}</td>
-            </tr>
-            {% endfor %}
+            <thead>
+                <tr>
+                    <th>ID da Denúncia</th>
+                    <th>Data e Hora</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for complaint in waterbody.complaints %}
+                <tr>
+                    <td>{{ complaint.id }}</td>
+                    <td>{{ complaint.datahora }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
-
+        
         <h2>Relatórios</h2>
-        <p>Total de Relatórios: {{ waterbody.count_reports }}</p>
+        <p>Total de Relatórios: {{ waterbody.reports|length }}</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>ID do Relatório</th>
+                    <th>Data e Hora</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in waterbody.reports %}
+                <tr>
+                    <td>{{ report.id }}</td>
+                    <td>{{ report.datahora }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
         <h2>Média do Índice de Biodiversidade</h2>
         {% if waterbody.biodiversity_media_index %}
