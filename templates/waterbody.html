@@ -6,23 +6,27 @@
     </head>
     <body>
         {% include 'header.html' %} 
-        <h1>{{ waterbody.nome }}</h1>
-        {% if user_type == 'pf' %}
+        <h1>{{ waterbody.waterbody[1] }}</h1>
+
+        {% if waterbody.user_type == 'pf' %}
             <button type="button">You are PF</button>
-        {% elif user_type == 'pj' %}
+        {% elif waterbody.user_type == 'pj' %}
             <button type="button">You are PJ</button>
         {% endif %}
-        <p>Coordinates: {{ waterbody.coordenadas }}</p>
-        <img src="{{ waterbody.imagemUrl }}" alt="Image of {{ waterbody.nome | default('waterbody') }}">
+
+        <p>Coordinates: {{ waterbody.waterbody[2] }}</p>
+        <img src="{{ waterbody.waterbody[3] }}" alt="Image of {{ waterbody.waterbody[3] | default('waterbody') }}">
+
         <h2>Quantidade de Denúncias</h2>
-        <p>Total de Denúncias: {{ count_complaints}}</p>
+        <p>Total de Denúncias: {{ waterbody.count_complaints }}</p>
+
         <h2>Denúncias por Severidade</h2>
         <table>
             <tr>
                 <th>Severidade</th>
                 <th>Número de Denúncias</th>
             </tr>
-            {% for item in denuncias_por_severidade %}
+            {% for item in waterbody.complaints_by_severity %}
             <tr>
                 <td>{{ item['Severidade'] }}</td>
                 <td>{{ item['Número de Denúncias'] }}</td>
@@ -31,21 +35,20 @@
         </table>
 
         <h2>Relatórios</h2>
-        <p>Total de Relatórios: {{ count_reports }}</p>
+        <p>Total de Relatórios: {{ waterbody.count_reports }}</p>
 
         <h2>Média do Índice de Biodiversidade</h2>
-        {% if media_indice_biodiversidade %}
-        <p>{{ media_indice_biodiversidade['Nome do Corpo de Água'] }}: {{ media_indice_biodiversidade['Média do Índice de Biodiversidade'] }}</p>
+        {% if waterbody.biodiversity_media_index %}
+        <p>{{ waterbody.biodiversity_media_index['Nome do Corpo de Água'] }}: {{ waterbody.biodiversity_media_index['Média do Índice de Biodiversidade'] }}</p>
         {% else %}
         <p>Nenhum índice disponível.</p>
         {% endif %}
 
         <h2>Estatísticas de pH</h2>
-        {% if ph_stats %}
-        <p>{{ ph_stats['Nome do Corpo de Água'] }}: pH Mínimo: {{ ph_stats['pH Mínimo'] }}, pH Médio: {{ ph_stats['pH Médio'] }}, pH Máximo: {{ ph_stats['pH Máximo'] }}</p>
+        {% if waterbody.ph_stats %}
+        <p>{{ waterbody.ph_stats['Nome do Corpo de Água'] }}: pH Mínimo: {{ waterbody.ph_stats['pH Mínimo'] }}, pH Médio: {{ waterbody.ph_stats['pH Médio'] }}, pH Máximo: {{ waterbody.ph_stats['pH Máximo'] }}</p>
         {% else %}
         <p>Nenhuma estatística de pH disponível.</p>
         {% endif %}
-
     </body>
 </html>

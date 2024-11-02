@@ -138,33 +138,10 @@ def logout():
 
 @app.route('/waterbody/<int:waterbody_id>', methods=['GET'])
 @login_required  
-def waterbody(waterbody_id):
+def waterbody_super_page(waterbody_id):
     
-    connection = get_db()
-    # Fetch waterbody details and related statistics
-    (
-    waterbody_data, 
-    count_complaints, 
-    count_reports, 
-    media_indice_biodiversidade, 
-    ph_stats, 
-    denuncias_por_severidade
-    ) = useful_queries.get_waterbodydata_by_id(connection, waterbody_id)
-    
-
-    user_type = useful_queries.get_user_type_by_id(current_user.id)
-    connection.close()
-    
-    return render_template(
-        "waterbody.html",
-        waterbody=waterbody_data,
-        count_complaints=count_complaints,
-        count_reports=count_reports,
-        media_indice_biodiversidade=media_indice_biodiversidade,
-        ph_stats=ph_stats,
-        denuncias_por_severidade=denuncias_por_severidade,
-        user_type=user_type
-    )
+    waterbody = model.create_waterbody_super_page(get_db(), waterbody_id)
+    return render_template("waterbody.html", waterbody=waterbody)
 
 @app.route("/search", methods=["GET", "POST"])
 @login_required
@@ -215,6 +192,32 @@ def report(report_id):
     report.referenced_waterbody = f"{referenced_waterbody.name} ({referenced_waterbody.id})"
 
     return render_template("report.html", report=report)
+
+@app.route('/complaint_form', methods=['GET', 'POST'])
+def complaint_form():
+    if request.method == 'POST':
+       
+        complainer = str(current_user.id) 
+        date_time = request.form['datahora']
+        referred_body = request.form['corpoReferente']
+        category = request.form['categoria']
+        severity = request.form['severidade']
+        description = request.form['descricao']
+        complaint = model.Complaint(complainer, date_time, referred_body, category, severity, description)
+        
+        model.send_complaint_form(get_db(), complaint)
+
+        return redirect(url_for('complaint_form'))
+
+    return render_template('complaint_form.html')
+
+@app.route('/complaint/<int:id>', methods=['GET'])
+def complaint(id):
+    
+    complaint = model.get_complaint(get_db(), id)
+    
+    return render_template('complaint.html', complaint=complaint)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,13 +1,9 @@
 import app
 
-
 def get_waterbodydata_by_id(db, waterbody_id):
     """Fetch waterbody details by ID."""
-    
-    if not db:
-        return "error: Failed to connect to database", 500
-
-    cursor = db.cursor(dictionary=True)
+  
+    cursor = db.cursor()
     cursor.execute("SELECT * FROM CorpoAgua WHERE id = %s", (waterbody_id,))
     waterbody_data = cursor.fetchone()
     
@@ -16,12 +12,12 @@ def get_waterbodydata_by_id(db, waterbody_id):
     
     count_complaints = get_count_of_complaints_by_waterbody(waterbody_id)
     count_reports = get_count_of_reports_by_waterbody(waterbody_id)
-    media_indice_biodiversidade = get_media_indice_biodiversidade(waterbody_id)
+    biodiversity_media_index = get_media_indice_biodiversidade(waterbody_id)
     ph_stats = get_ph_statistics(waterbody_id)
-    denuncias_por_severidade = get_denuncias_por_severidade(waterbody_id)
+    complaints_by_severity = get_denuncias_por_severidade(waterbody_id)
 
     cursor.close()
-    return waterbody_data, count_complaints, count_reports, media_indice_biodiversidade, ph_stats, denuncias_por_severidade
+    return waterbody_data, count_complaints, count_reports, biodiversity_media_index, ph_stats, complaints_by_severity
 
 def get_count_of_complaints_by_waterbody(corpo_id):
     """Fetch the count of complaints related to a specific water body."""
@@ -41,8 +37,7 @@ def get_count_of_complaints_by_waterbody(corpo_id):
     result = cursor.fetchone()
 
     cursor.close()
-    connection.close()
-    
+ 
     # Return the count, defaulting to 0 if there are no complaints
     return result['total_denuncias'] if result else 0
 
@@ -68,7 +63,6 @@ def get_count_of_reports_by_waterbody(corpo_id):
     count_result = cursor.fetchone()  # Fetch the result which will be a single row
 
     cursor.close()
-    connection.close()
     
     return count_result['Número de Relatórios'] if count_result else 0  # Return the count
 
@@ -96,7 +90,6 @@ def get_media_indice_biodiversidade(corpo_id):
     media = cursor.fetchone()
 
     cursor.close()
-    connection.close()
     return media  # Return the average biodiversity index
 
 
@@ -125,7 +118,6 @@ def get_ph_statistics(corpo_id):
     ph_stats = cursor.fetchone()
 
     cursor.close()
-    connection.close()
     return ph_stats  # Return pH statistics
 
 
@@ -153,7 +145,6 @@ def get_denuncias_por_severidade(corpo_id):
     severidade_counts = cursor.fetchall()
 
     cursor.close()
-    connection.close()
     return severidade_counts  # Return counts by severity
 
 def get_user_type_by_id(user_id):
@@ -169,7 +160,6 @@ def get_user_type_by_id(user_id):
     
     result = cursor.fetchone()  # Fetch one record
     cursor.close()
-    connection.close()
     
     if result:
         return result['tipo']  # Return the user type
