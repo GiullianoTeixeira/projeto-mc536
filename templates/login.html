@@ -24,6 +24,14 @@
             <h3 class="text-center mb-4">Login</h3>
             <form action="/login" method="POST">
               <div class="mb-3">
+                {% with messages = get_flashed_messages(with_categories=true)%}
+                  {% if messages%}
+                    {% for category, message in messages%}
+                      <p class="text-center text-{{ category }}">{{message}}</p>
+                    {%endfor%}
+                  {%endif%}
+                {%endwith%}
+
                 <label for="username" class="form-label">Username</label>
                 <input type="text" name="username" class="form-control" id="username" placeholder="Enter your username", value="{{ request.form.username }}">
               </div>
@@ -38,13 +46,6 @@
             <div class="text-center mt-3">
               <a href="{{ url_for('register') }}" class="text-decoration-none">Create account</a>
             </div>
-            {% with messages = get_flashed_messages()%}
-            {% if messages%}
-                {% for message in messages%}
-                <p>{{message}}</p>
-                {%endfor%}
-                {%endif%}
-                {%endwith%}
           </div>
         </div>
       </div>
