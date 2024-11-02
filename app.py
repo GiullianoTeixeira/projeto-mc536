@@ -27,7 +27,6 @@ from flask import abort
 # Custom decorator to check if the user has the required role
 def role_required(role: model.UserRole):
     def has_role(user: model.User, role: model.UserRole) -> bool:
-        print(user)
         if role == model.UserRole.PF:
             return user.type == "pf"
         elif role == model.UserRole.PJ_pv:

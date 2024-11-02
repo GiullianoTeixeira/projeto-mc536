@@ -2,6 +2,10 @@ from flask_login import UserMixin
 import mysql.connector
 from enum import Enum
 from datetime import datetime
+import colorama
+from colorama import Fore
+
+colorama.init(autoreset=True)
 
 class UserRole(Enum):
     PF = 'PF'
@@ -87,7 +91,7 @@ def get_user_by_id(db, id) -> User:
     user = cursor.fetchone()
     cursor.close()
 
-    print(cursor.statement)
+    print(Fore.YELLOW + cursor.statement)
     if user:
         return User(user[0], user[1], user[2])
     return None
@@ -98,7 +102,7 @@ def get_typed_user_by_id(db, id) -> User:
     user = cursor.fetchone()
     cursor.close()
 
-    print(cursor.statement)
+    print(Fore.YELLOW + cursor.statement)
     if user:
         if user[2] == 'pf':
             cursor = db.cursor()
@@ -123,7 +127,7 @@ def get_user_password(db, id) -> str:
     user = cursor.fetchone()
     cursor.close()
 
-    print(cursor.statement)
+    print(Fore.YELLOW + cursor.statement)
     if user:
         return user[0]
     return None
@@ -137,9 +141,8 @@ def create_user(db, user):
         cursor.execute('INSERT INTO PessoaJuridica (cnpj, razaoSocial, representante, isOrgaoGovernamental) VALUES (%s, %s, %s, %s)', (user.id, user.razao_social, user.representative, user.is_govt))
 
     db.commit()
+    print(Fore.YELLOW + cursor.statement)
     cursor.close()
-    print(cursor.statement)
-
 
 def get_waterbody_by_id(db, id) -> WaterBody:
     cursor = db.cursor()
@@ -147,7 +150,7 @@ def get_waterbody_by_id(db, id) -> WaterBody:
     waterbody = cursor.fetchone()
     cursor.close()
 
-    print(cursor.statement)
+    print(Fore.YELLOW + cursor.statement)
     if waterbody:
         return WaterBody(*waterbody)
     return None
@@ -158,7 +161,7 @@ def search_waterbody_by_name(db, name) -> list[WaterBody]:
     results = cursor.fetchall()
     cursor.close()
 
-    print(cursor.statement)
+    print(Fore.YELLOW + cursor.statement)
     return [WaterBody(*result) for result in results]
 
 def get_solution_by_id(db, id) -> Solution:
@@ -167,7 +170,7 @@ def get_solution_by_id(db, id) -> Solution:
     solution = cursor.fetchone()
     cursor.close()
 
-    print(cursor.statement)
+    print(Fore.YELLOW + cursor.statement)
     if solution:
         return Solution(*solution)
     return None
@@ -178,7 +181,7 @@ def get_simulation_by_id(db, id) -> Simulation:
     simulation = cursor.fetchone()
     cursor.close()
 
-    print(cursor.statement)
+    print(Fore.YELLOW + cursor.statement)
     if simulation:
         return Simulation(*simulation)
     return None
@@ -189,7 +192,7 @@ def get_report_by_id(db, id) -> Report:
     report = cursor.fetchone()
     cursor.close()
 
-    print(cursor.statement)
+    print(Fore.YELLOW + cursor.statement)
     if report:
         return Report(*report)
     return None
