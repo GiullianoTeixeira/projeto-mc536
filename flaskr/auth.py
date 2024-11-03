@@ -62,7 +62,8 @@ def login_handler():
             session['user_id'] = user.id
             return redirect(url_for("search.search"))
         else:
-            return "Login failed"
+            flash("Login failed")
+            return render_template("login.html")
         
     elif request.method == "GET":
         return render_template("login.html")
