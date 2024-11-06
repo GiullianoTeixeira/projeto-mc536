@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solução #{{ solution.id }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+    <!-- Dynamic Title for Solução -->
+    <h1 class="text-center mb-4">Solução #{{ solution.id }}</h1>
+    
+    <!-- Solução Details in a Table -->
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th class="table-primary">Entidade Emissora</th>
+                <td>{{ solution.issuing_entity }}</td>
+            </tr>
+            <tr>
+                <th class="table-primary">Corpo Referente</th>
+                <td>{{ solution.referenced_waterbody }}</td>
+            </tr>
+            <tr>
+                <th class="table-primary">Orçamento</th>
+                <td>{{ solution.budget }}</td>
+            </tr>
+            <tr>
+                <th class="table-primary">Descrição</th>
+                <td>{{ solution.description }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
