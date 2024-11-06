@@ -136,8 +136,6 @@ def logout():
 def waterbody_super_page(waterbody_id):
     
     waterbody = model.create_waterbody_super_page(get_db(), waterbody_id)
-    print(waterbody.waterbody)
-    print(waterbody.complaints[0]['id'])
     return render_template("waterbody.html", waterbody=waterbody)
 
 @app.route("/search", methods=["GET", "POST"])

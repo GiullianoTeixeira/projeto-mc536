@@ -110,19 +110,18 @@ class WaterBodySuperPage:
                 f"Solutions: {self.solutions}")
     
 class Complaint:
-    def __init__(self, complainer, date_time, referred_body, category, severity, description):
+    def __init__(self, waterbody: WaterBody, complainer: str, date_time: datetime, category: Enum, severity: Enum, description: str):
+        self.waterbody = waterbody
         self.complainer = complainer
         self.date_time = date_time
-        self.referred_body = referred_body
         self.category = category
         self.severity = severity
         self.description = description
         
     def __repr__(self):
-        return (f"Complaint Details:\n"
+        return (f"Waterbody: {self.waterbody.name}\n"
                 f"Complainer: {self.complainer}\n"
                 f"Date and Time: {self.date_time}\n"
-                f"Referred Body: {self.referred_body}\n"
                 f"Category: {self.category}\n"
                 f"Severity: {self.severity}\n"
                 f"Description: {self.description}\n")
@@ -245,7 +244,7 @@ def send_complaint_form(db, complaint):
         INSERT INTO Denuncia
         (denunciante, datahora, corpoReferente, categoria, severidade, descricao) 
         VALUES (%s, %s, %s, %s, %s, %s)
-    """, (complaint.complainer, complaint.date_time, complaint.referred_body, complaint.category, complaint.severity, complaint.description))
+    """, (complaint.complainer, complaint.date_time, complaint.waterbody.id, complaint.category, complaint.severity, complaint.description))
     
     db.commit()
     cursor.close()
@@ -258,7 +257,6 @@ def create_waterbody_super_page(db, waterbody_id):
     user_type = get_user_type_by_id(db, current_user.id)
     
     waterbody_super_page = WaterBodySuperPage(waterbody, complaints, reports, biodiversity_media_index, ph_stats, complaints_by_severity, user_type, simulations, solutions)
-    print(waterbody_super_page)
     
     return waterbody_super_page
 
@@ -271,18 +269,18 @@ def get_complaint(db, id):
     
     return complaint
 
-def get_simulations_by_waterbody(db, corpo_id):
+def get_simulations_by_waterbody(db, body_id):
     cursor = db.cursor()
-    cursor.execute('SELECT * FROM Simulacao WHERE corpoReferente = %s', (corpo_id,))
+    cursor.execute('SELECT * FROM Simulacao WHERE corpoReferente = %s', (body_id,))
     simulations = cursor.fetchall()
     print(Fore.YELLOW + cursor.statement)
     cursor.close()
 
     return [Simulation(*simulation) for simulation in simulations]
 
-def get_solutions_by_waterbody(db, corpo_id):
+def get_solutions_by_waterbody(db, body_id):
     cursor = db.cursor()
-    cursor.execute('SELECT * FROM Solucao WHERE corpoReferente = %s', (corpo_id,))
+    cursor.execute('SELECT * FROM Solucao WHERE corpoReferente = %s', (body_id,))
     solutions = cursor.fetchall()
     print(Fore.YELLOW + cursor.statement)
     cursor.close()
@@ -296,15 +294,15 @@ def get_waterbodydata_by_id(db, waterbody_id):
     
     complaints =get_complaints_by_waterbody(db, waterbody_id)
     reports = get_reports_by_waterbody(db, waterbody_id)
-    biodiversity_media_index = get_media_indice_biodiversidade(db, waterbody_id)
+    biodiversity_media_index = get_biodiversity_media_index(db, waterbody_id)
     ph_stats = get_ph_statistics(db, waterbody_id)
-    complaints_by_severity = get_denuncias_por_severidade(db, waterbody_id)
+    complaints_by_severity = get_complaints_by_severity(db, waterbody_id)
     simulations = get_simulations_by_waterbody(db, waterbody_id)
     solutions = get_solutions_by_waterbody(db, waterbody_id)
 
     return waterbody, complaints, reports, biodiversity_media_index, ph_stats, complaints_by_severity, simulations, solutions
 
-def get_complaints_by_waterbody(db, corpo_id):
+def get_complaints_by_waterbody(db, body_id):
     cursor = db.cursor(dictionary=True)
     cursor.execute("""
         SELECT
@@ -322,7 +320,7 @@ def get_complaints_by_waterbody(db, corpo_id):
             CorpoAgua ca ON d.corpoReferente = ca.id
         WHERE
             ca.id = %s;
-    """, (corpo_id,))
+    """, (body_id,))
     
     complaints = cursor.fetchall()
 
@@ -330,7 +328,7 @@ def get_complaints_by_waterbody(db, corpo_id):
     
     return complaints
 
-def get_reports_by_waterbody(db, corpo_id):
+def get_reports_by_waterbody(db, body_id):
     cursor = db.cursor(dictionary=True) 
     
     cursor.execute("""
@@ -349,7 +347,7 @@ def get_reports_by_waterbody(db, corpo_id):
             CorpoAgua ca ON r.corpoReferente = ca.id
         WHERE
             ca.id = %s;
-    """, (corpo_id,))
+    """, (body_id,))
     
     reports = cursor.fetchall()
 
@@ -357,7 +355,7 @@ def get_reports_by_waterbody(db, corpo_id):
     
     return reports 
 
-def get_media_indice_biodiversidade(db, corpo_id):
+def get_biodiversity_media_index(db, body_id):
     cursor = db.cursor(dictionary=True)
     cursor.execute("""
         SELECT
@@ -371,13 +369,13 @@ def get_media_indice_biodiversidade(db, corpo_id):
             ca.id = %s 
         GROUP BY
             ca.nome;
-    """, (corpo_id,))
+    """, (body_id,))
     average = cursor.fetchone()
 
     cursor.close()
     return average  
 
-def get_ph_statistics(db, corpo_id):
+def get_ph_statistics(db, body_id):
     cursor = db.cursor(dictionary=True)
     cursor.execute("""
         SELECT
@@ -393,13 +391,13 @@ def get_ph_statistics(db, corpo_id):
             ca.id = %s 
         GROUP BY
             ca.nome;
-    """, (corpo_id,))
+    """, (body_id,))
     ph_stats = cursor.fetchone()
 
     cursor.close()
     return ph_stats 
 
-def get_denuncias_por_severidade(db, corpo_id):
+def get_complaints_by_severity(db, body_id):
     cursor = db.cursor(dictionary=True)
     cursor.execute("""
         SELECT
@@ -414,7 +412,7 @@ def get_denuncias_por_severidade(db, corpo_id):
             ca.id = %s  
         GROUP BY
             d.severidade, ca.nome;
-    """, (corpo_id,))
+    """, (body_id,))
     severidade_counts = cursor.fetchall()
 
     cursor.close()
