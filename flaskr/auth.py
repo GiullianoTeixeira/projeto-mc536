@@ -23,6 +23,11 @@ def register():
             name = request.form.get("name")
             date_of_birth = request.form.get("dob")
             user = model.UserPF(id, password, name, date_of_birth)
+
+            if not name:
+                error = 'Username is required'
+            elif not password:
+                error = 'Password is required'
         elif user_type == "PJ":
             id = request.form.get("cnpj")
             password = request.form.get("passwordPJ")
@@ -30,11 +35,6 @@ def register():
             representative = request.form.get("representative")
             is_govt = True if request.form.get("govInstitution") == 'on' else False
             user = model.UserPJ(id, password, razao_social, representative, is_govt)
-        
-        if not name:
-            error = 'Username is required'
-        elif not password:
-            error = 'Password is required'
 
         if error is None:
             try:
@@ -46,7 +46,7 @@ def register():
             else:
                 return render_template("login.html")
         else:
-            flash(error)
+            flash(error, "danger")
     
         return render_template("register.html")
             
@@ -62,7 +62,7 @@ def login_handler():
             session['user_id'] = user.id
             return redirect(url_for("search.search"))
         else:
-            flash("Login failed")
+            flash("Login failed", "danger")
             return render_template("login.html")
         
     elif request.method == "GET":
@@ -79,7 +79,7 @@ def load_user(user_id):
 @login_manager.unauthorized_handler
 def unauthorized():
     flash("You must be logged in to access this page", "danger")
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('auth.login_handler'))
 
 @bp.context_processor
 def inject_user_id():
@@ -90,4 +90,4 @@ def inject_user_id():
 def logout():
     logout_user()
     flash("You have been logged out", "info")
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('auth.login_handler'))
