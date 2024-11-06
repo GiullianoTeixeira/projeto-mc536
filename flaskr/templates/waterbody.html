@@ -38,7 +38,7 @@
         <h2>Ações</h2>
         <br>
         <div class="buttons">
-            <a href="{{ url_for('waterbody.complaint_form') }}" class="{% if sp_info.user_type != 'pf' %}disabled{% endif %}">
+            <a href="{{ url_for('waterbody.complaint_form', waterbody_id = sp_info.waterbody.id) }}" class="{% if sp_info.user_type != 'pf' %}disabled{% endif %}">
                 <button type="button" {% if sp_info.user_type != 'pf' %}disabled{% endif %}>Denúncia</button>
             </a>
             
