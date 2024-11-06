@@ -28,11 +28,8 @@ bp = Blueprint('waterbody', __name__)
 @bp.route('/waterbody/<int:waterbody_id>', methods=['GET'])
 @login_required  
 def waterbody_super_page(waterbody_id):
-    
-    waterbody = model.create_waterbody_super_page(db.get_db(), waterbody_id)
-    print(waterbody.waterbody)
-    print(waterbody.complaints[0]['id'])
-    return render_template("waterbody.html", waterbody=waterbody)
+    sp_info = model.create_waterbody_super_page(db.get_db(), waterbody_id)
+    return render_template("waterbody.html", sp_info=sp_info)
 
 @bp.route("/solution/<int:solution_id>", methods=["GET"])
 @login_required
@@ -61,23 +58,23 @@ def simulation(simulation_id):
 
     return render_template("simulation.html", simulation=simulation)
 
-@bp.route("/waterbody/<int:waterbody_id>/report/<int:report_id>", methods=["GET"])
+@bp.route("/report/<int:report_id>", methods=["GET"])
 @login_required
-def report(waterbody_id, report_id):
+def report(report_id):
     report = model.get_report_by_id(db.get_db(), report_id)
 
     issuing_entity = model.get_typed_user_by_id(db.get_db(), report.issuing_entity)
     report.issuing_entity = f"{issuing_entity.razao_social} ({issuing_entity.id})"
 
-    referenced_waterbody = model.get_waterbody_by_id(db.get_db(), waterbody_id)
+    referenced_waterbody = model.get_waterbody_by_id(db.get_db(), report.referenced_waterbody)
     report.referenced_waterbody = f"{referenced_waterbody.name} ({referenced_waterbody.id})"
 
     return render_template("report.html", report=report)
 
 @bp.route('/complaint_form', methods=['GET', 'POST'])
+@login_required
 def complaint_form():
     if request.method == 'POST':
-       
         complainer = str(current_user.id) 
         date_time = request.form['datahora']
         referred_body = request.form['corpoReferente']
@@ -89,12 +86,10 @@ def complaint_form():
         model.send_complaint_form(db.get_db(), complaint)
 
         return redirect(url_for('complaint_form'))
+    return render_template('complaint_form.html', user=str(current_user.id))
 
-    return render_template('complaint_form.html')
-
-@bp.route('/waterbody/<int:waterbody_id>/complaint/<int:id>', methods=['GET'])
-def complaint(waterbody_id, id):
-    
+@bp.route('/complaint/<int:id>', methods=['GET'])
+def complaint(id):
     complaint = model.get_complaint(db.get_db(), id)
     
     return render_template('complaint.html', complaint=complaint)

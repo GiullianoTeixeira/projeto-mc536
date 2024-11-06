@@ -1,78 +1,146 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Waterbody Details</title>
-    </head>
-    <body>
-        {% include 'header.html' %} 
-        <h1>{{ waterbody.waterbody['nome'] }}</h1>
-
-        {% if waterbody.user_type == 'pf' %}
-            <button type="button">You are PF</button>
-        {% elif waterbody.user_type == 'pj' %}
-            <button type="button">You are PJ</button>
-        {% endif %}
-
-        <p>Coordinates: {{ waterbody.waterbody['coordenadas'] }}</p>
-        <img src="{{ waterbody.waterbody['imagemUrl'] }}" alt="Image of {{ waterbody.waterbody['imagemUrl'] | default('waterbody') }}">
-
-        <h2>Quantidade de Denúncias</h2>
-        <p>Total de Denúncias: {{ waterbody.complaints|length }}</p>
-        
-        <h2>Denúncias</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID da Denúncia</th>
-                    <th>Data e Hora</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for complaint in waterbody.complaints %}
-                <tr>
-                    <td><a href="/waterbody/{{ waterbody.waterbody['id'] }}/complaint/{{ complaint.id }}">{{ complaint.id }}</a></td>
-                    <td><a href="/waterbody/{{ waterbody.waterbody['id'] }}/complaint/{{ complaint.id }}">{{ complaint.datahora }}</a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        
-        <h2>Relatórios</h2>
-        <p>Total de Relatórios: {{ waterbody.reports|length }}</p>
-        
-        <table>
-            <thead>
-                <tr>
-                    <th>ID do Relatório</th>
-                    <th>Data e Hora</th>
-                </tr>
-            </thead>
-            <tbody>
-                <p style="color: red;">Talvez essa informacao n deveria estar aqui</p>
-                {% for report in waterbody.reports %}
-                <tr>
-                    <tr>
-                        <td><a href="/waterbody/{{ waterbody.waterbody['id'] }}/report/{{ report.id }}">{{ report.id }}</a></td>
-                        <td><a href="/waterbody/{{ waterbody.waterbody['id'] }}/report/{{ report.id }}">{{ report.datahora }}</a></td>
-                    </tr>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <h2>Média do Índice de Biodiversidade</h2>
-        {% if waterbody.biodiversity_media_index %}
-        <p>{{ waterbody.biodiversity_media_index['Nome do Corpo de Água'] }}: {{ waterbody.biodiversity_media_index['Média do Índice de Biodiversidade'] }}</p>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Aquadata: {{ sp_info.nome }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <h1 class="inline">{{ sp_info.nome }}</h1>
+        <p class="inline" id="right">Foto tirada em {{ sp_info.waterbody.coords }}</p>
+        <br>
+        <img src="{{ sp_info.waterbody.image_url }}" alt="Image of {{ sp_info.nome | default('sp_info') }}" class="img-fluid" style="max-width: 100%; height: auto; margin: 10px 0;">
+        <br>
+        <h2>Informações Gerais</h2>
+        <h3>Média do Índice de Biodiversidade</h2>
+        {% if sp_info.biodiversity_media_index %}
+            <p>{{ sp_info.biodiversity_media_index['Média do Índice de Biodiversidade'] }}</p>
         {% else %}
-        <p>Nenhum índice disponível.</p>
+            <p>Indisponível</p>
         {% endif %}
-
+        <br>
         <h2>Estatísticas de pH</h2>
-        {% if waterbody.ph_stats %}
-        <p>{{ waterbody.ph_stats['Nome do Corpo de Água'] }}: pH Mínimo: {{ waterbody.ph_stats['pH Mínimo'] }}, pH Médio: {{ waterbody.ph_stats['pH Médio'] }}, pH Máximo: {{ waterbody.ph_stats['pH Máximo'] }}</p>
+        {% if sp_info.ph_stats %}
+            <ul>
+                <li>pH Mínimo: {{ sp_info.ph_stats['pH Mínimo'] }}</li>
+                <li>pH Médio: {{ sp_info.ph_stats['pH Médio'] }}</li>
+                <li>pH Máximo: {{ sp_info.ph_stats['pH Máximo'] }}</li>
+            </ul>
         {% else %}
-        <p>Nenhuma estatística de pH disponível.</p>
+            <p>Indisponível.</p>
         {% endif %}
-    </body>
+        <!-- <h3>Outras informações</h3> -->
+
+        <hr>
+        <h2>Ações</h2>
+        <br>
+        <div class="buttons">
+            <a href="{{ url_for('waterbody.complaint_form') }}" class="{% if sp_info.user_type != 'pf' %}disabled{% endif %}">
+                <button type="button" {% if sp_info.user_type != 'pf' %}disabled{% endif %}>Denúncia</button>
+            </a>
+            
+            <a href="/gerar-relatorio/{{ sp_info.waterbody.id }}" class="{% if sp_info.user_type != 'pj' %}disabled{% endif %}">
+                <button type="button" {% if sp_info.user_type != 'pj' %}disabled{% endif %}>Gerar Relatório</button>
+            </a>
+            
+            <a href="/simular/{{ sp_info.waterbody.id }}" class="{% if sp_info.user_type != 'pj' %}disabled{% endif %}">
+                <button type="button" {% if sp_info.user_type != 'pj' %}disabled{% endif %}>Simular</button>
+            </a>
+            
+            <a href="/acoes/{{ sp_info.waterbody.id }}" class="{% if sp_info.user_type != 'pj' %}disabled{% endif %}">
+                <button type="button" {% if sp_info.user_type != 'pj' %}disabled{% endif %}>Ações</button>
+            </a>
+        </div>
+    </div>
+
+    <div class="container scrollable">
+        <h2>Histórico de denúncias</h2>
+        <p>Total de Denúncias: {{ sp_info.complaints|length }}</p>
+        <table>
+            {% for complaint in sp_info.complaints %}
+            <tr>
+                <td><a href="{{ url_for('waterbody.complaint', id=complaint['id']) }}">Denúncia #{{ complaint['id'] }}</a> ({{ complaint['Severidade'] }})</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h3>Denúncias por Severidade</h3>
+        {% if sp_info.complaints_by_severity %}
+            <table>
+                <tr>
+                    <th>Severidade</th>
+                    <th>Número de Denúncias</th>
+                </tr>
+                {% for item in sp_info.complaints_by_severity %}
+                <tr>
+                    <td>{{ item['Severidade'] }}</td>
+                    <td>{{ item['Número de Denúncias'] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>Não há denúncias para este rio.</p>
+        {% endif %}
+    </div>
+
+
+    {% if sp_info.user_type == 'pj' %}
+    <div class="container scrollable">
+        <h2>Histórico de relatórios</h2>
+        {% if sp_info.reports|length > 0 %}
+            <p>Total de Relatórios: {{ sp_info.reports|length }}</p>
+        {% else %}
+            <p>Não há relatórios disponíveis para este rio.</p>
+        {% endif %}
+
+        <table>
+            {% for report in sp_info.reports %}
+            <tr>
+                <td><a href="{{ url_for('waterbody.report', report_id=report['id']) }}">Relatório #{{ report['id'] }}</a> (Emitido por {{ report['Entidade Emissora'] }})</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %}
+
+    {% if sp_info.user_type == 'pj' %}
+    <div class="container scrollable">
+        <h2>Histórico de simulações</h2>
+        {% if sp_info.simulations|length > 0 %}
+            <p>Total de Simulações: {{ sp_info.simulations|length }}</p>
+        {% else %}
+            <p>Não há simulações disponíveis para este rio.</p>
+        {% endif %}
+
+        <table>
+            {% for simulation in sp_info.simulations %}
+            <tr>
+                <td><a href="{{ url_for('waterbody.simulation', simulation_id=simulation['id']) }}">Simulação #{{ simulation['id'] }}</a> (Emitido por {{ simulation['Entidade Emissora'] }})</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %}
+
+
+    <div class="container scrollable">
+        <h2>Medidas implementadas</h2>
+        {% if sp_info.solutions|length > 0 %}
+            <p>Total de Medidas Implementadas: {{ sp_info.solutions|length }}</p>
+        {% else %}
+            <p>Não há medidas implementadas para este rio.</p>
+        {% endif %}
+
+        <table>
+            {% for solution in sp_info.solutions %}
+            <tr>
+                <td><a href="{{ url_for('waterbody.solution', solution_id=solution['id']) }}">Medida #{{ solution['id'] }}</a> (Emitido por {{ solution['Entidade Emissora'] }})</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
 </html>

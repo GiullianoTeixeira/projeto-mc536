@@ -86,8 +86,8 @@ class Report:
         return f"Report(id='{self.id}', issuing_entity='{self.issuing_entity}', datetime='{self.datetime}', referenced_waterbody='{self.referenced_waterbody}', text='{self.text}', pH='{self.pH}', biodiversity_index='{self.biodiversity_index}')"
 
 class WaterBodySuperPage:
-    def __init__(self, waterbody, complaints, reports, 
-                 biodiversity_media_index, ph_stats, complaints_by_severity, user_type):
+    def __init__(self, waterbody: WaterBody, complaints: list[list[int, datetime]], reports: list[list[int, datetime]],
+                 biodiversity_media_index, ph_stats, complaints_by_severity, user_type, simulations, solutions):
         self.waterbody = waterbody
         self.complaints = complaints
         self.reports = reports
@@ -95,15 +95,19 @@ class WaterBodySuperPage:
         self.ph_stats = ph_stats
         self.complaints_by_severity = complaints_by_severity
         self.user_type = user_type
+        self.simulations = simulations
+        self.solutions = solutions
     
     def __repr__(self):
         return (f"Water Body: {self.waterbody}"
                 f"Complaints: {self.complaints}"
-                f"Count: {self.reports}"
+                f"Reports: {self.reports}"
                 f"Average Biodiversity Index: {self.biodiversity_media_index}"
                 f"pH Statistics: {self.ph_stats}"
                 f"Complaints by Severity: {self.complaints_by_severity}"
-                f"User Type: {self.user_type}")
+                f"User Type: {self.user_type}"
+                f"Simulations: {self.simulations}"
+                f"Solutions: {self.solutions}")
     
 class Complaint:
     def __init__(self, complainer, date_time, referred_body, category, severity, description):
@@ -248,12 +252,13 @@ def send_complaint_form(db, complaint):
 
 def create_waterbody_super_page(db, waterbody_id):
     (
-        waterbody, complaints, reports, biodiversity_media_index, ph_stats, complaints_by_severity
+        waterbody, complaints, reports, biodiversity_media_index, ph_stats, complaints_by_severity, simulations, solutions
     ) = get_waterbodydata_by_id(db, waterbody_id)
     
     user_type = get_user_type_by_id(db, current_user.id)
     
-    waterbody_super_page = WaterBodySuperPage(waterbody, complaints, reports, biodiversity_media_index, ph_stats, complaints_by_severity, user_type)
+    waterbody_super_page = WaterBodySuperPage(waterbody, complaints, reports, biodiversity_media_index, ph_stats, complaints_by_severity, user_type, simulations, solutions)
+    print(waterbody_super_page)
     
     return waterbody_super_page
 
@@ -266,12 +271,27 @@ def get_complaint(db, id):
     
     return complaint
 
+def get_simulations_by_waterbody(db, corpo_id):
+    cursor = db.cursor()
+    cursor.execute('SELECT * FROM Simulacao WHERE corpoReferente = %s', (corpo_id,))
+    simulations = cursor.fetchall()
+    print(Fore.YELLOW + cursor.statement)
+    cursor.close()
+
+    return [Simulation(*simulation) for simulation in simulations]
+
+def get_solutions_by_waterbody(db, corpo_id):
+    cursor = db.cursor()
+    cursor.execute('SELECT * FROM Solucao WHERE corpoReferente = %s', (corpo_id,))
+    solutions = cursor.fetchall()
+    print(Fore.YELLOW + cursor.statement)
+    cursor.close()
+
+    return [Solution(*solution) for solution in solutions]
+
 def get_waterbodydata_by_id(db, waterbody_id):
-    cursor = db.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM CorpoAgua WHERE id = %s", (waterbody_id,))
-    waterbody_data = cursor.fetchone()
-    
-    if not waterbody_data:
+    waterbody = get_waterbody_by_id(db, waterbody_id)
+    if not waterbody:
         return "error: Waterbody not found", 404
     
     complaints =get_complaints_by_waterbody(db, waterbody_id)
@@ -279,9 +299,10 @@ def get_waterbodydata_by_id(db, waterbody_id):
     biodiversity_media_index = get_media_indice_biodiversidade(db, waterbody_id)
     ph_stats = get_ph_statistics(db, waterbody_id)
     complaints_by_severity = get_denuncias_por_severidade(db, waterbody_id)
+    simulations = get_simulations_by_waterbody(db, waterbody_id)
+    solutions = get_solutions_by_waterbody(db, waterbody_id)
 
-    cursor.close()
-    return waterbody_data, complaints,reports, biodiversity_media_index, ph_stats, complaints_by_severity
+    return waterbody, complaints, reports, biodiversity_media_index, ph_stats, complaints_by_severity, simulations, solutions
 
 def get_complaints_by_waterbody(db, corpo_id):
     cursor = db.cursor(dictionary=True)
