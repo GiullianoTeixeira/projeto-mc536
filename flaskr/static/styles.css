@@ -1,0 +1,102 @@
+body {
+    font-family: "Poppins";
+    line-height: 1.6;
+    background-color: #f0f8ff;
+    color: #333; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+h1, h2, h3 {
+    color: #007f8c;
+}
+
+a.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.container {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+.inline {
+    display: inline
+}
+
+#right {
+    float: right;
+}
+
+button {
+    background-color: #007f8c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #005f73;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.scrollable {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.scrollable h2, .scrollable h3 {
+    color: #0a9396;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #005f73;
+    color: #fff;
+}
+
+tr:hover {
+    background-color: #e9f5f5;
+}
+
+hr {
+    color:#005f73;
+}
+
+.container p {
+    margin-top: 10px;
+    font-style: italic;
+    color: #555;
+}
