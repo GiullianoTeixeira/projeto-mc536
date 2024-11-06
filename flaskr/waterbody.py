@@ -71,22 +71,22 @@ def report(report_id):
 
     return render_template("report.html", report=report)
 
-@bp.route('/complaint_form', methods=['GET', 'POST'])
+@bp.route('/<string:waterbody_id>/complaint_form', methods=['GET', 'POST'])
 @login_required
-def complaint_form():
-    if request.method == 'POST':
+def complaint_form(waterbody_id):
+    waterbody = model.get_waterbody_by_id(db.get_db(), waterbody_id)
+    
+    if request.method == 'POST':    
         complainer = str(current_user.id) 
         date_time = request.form['datahora']
-        referred_body = request.form['corpoReferente']
         category = request.form['categoria']
         severity = request.form['severidade']
         description = request.form['descricao']
-        complaint = model.Complaint(complainer, date_time, referred_body, category, severity, description)
+        complaint = model.Complaint(waterbody, complainer, date_time, category, severity, description)
         
         model.send_complaint_form(db.get_db(), complaint)
-
-        return redirect(url_for('complaint_form'))
-    return render_template('complaint_form.html', user=str(current_user.id))
+        return jsonify({'success': True})
+    return render_template('complaint_form.html', user=str(current_user.id), waterbody=waterbody)
 
 @bp.route('/complaint/<int:id>', methods=['GET'])
 def complaint(id):
