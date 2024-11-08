@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="inline">{{ sp_info.nome }}</h1>
+        <h1 class="inline">{{ sp_info.waterbody.name }}</h1>
         <p class="inline" id="right">Foto tirada em {{ sp_info.waterbody.coords }}</p>
         <br>
         <img src="{{ sp_info.waterbody.image_url }}" alt="Image of {{ sp_info.nome | default('sp_info') }}" class="img-fluid" style="max-width: 100%; height: auto; margin: 10px 0;">
