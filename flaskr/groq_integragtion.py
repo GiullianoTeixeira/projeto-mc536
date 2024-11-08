@@ -8,8 +8,11 @@ from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, Tool
 import dotenv
 import os
 
+<<<<<<< HEAD
 from deep_translator import GoogleTranslator
 
+=======
+>>>>>>> 3756824273ffac7783a1d5dda9fc726908da2c0b
 dotenv.load_dotenv()
 
 MODEL = 'llama-3.1-70b-versatile'
@@ -66,19 +69,29 @@ def get_action_proposal(river_name):
     result = result[result.find("{"):result.rfind("}")+1]
     result = ''.join(c for c in result if c.isprintable())
     
+<<<<<<< HEAD
 
     print(result[1])
     
+=======
+>>>>>>> 3756824273ffac7783a1d5dda9fc726908da2c0b
     return json.loads(result)
 
 if __name__ == "__main__":
     result = get_report("Amazon River")
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3756824273ffac7783a1d5dda9fc726908da2c0b
     print(result)
 
     result = get_simulation("Amazon River", "a severe drought")
     print(result)
 
     result = get_action_proposal("Amazon River")
+<<<<<<< HEAD
     print(result)
 
+=======
+    print(result)
+>>>>>>> 3756824273ffac7783a1d5dda9fc726908da2c0b
