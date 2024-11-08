@@ -42,7 +42,7 @@
                 <button type="button" {% if sp_info.user_type != 'pf' %}disabled{% endif %}>Denúncia</button>
             </a>
             
-            <a href="/gerar-relatorio/{{ sp_info.waterbody.id }}" class="{% if sp_info.user_type != 'pj' %}disabled{% endif %}">
+            <a href="{{ url_for('waterbody.create_report', waterbody_id = sp_info.waterbody.id) }}" class="{% if sp_info.user_type != 'pj' %}disabled{% endif %}">
                 <button type="button" {% if sp_info.user_type != 'pj' %}disabled{% endif %}>Gerar Relatório</button>
             </a>
             
