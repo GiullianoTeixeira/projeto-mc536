@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="inline">{{ sp_info.nome }}</h1>
+        <h1 class="inline">{{ sp_info.waterbody.name }}</h1>
         <p class="inline" id="right">Foto tirada em {{ sp_info.waterbody.coords }}</p>
         <br>
         <img src="{{ sp_info.waterbody.image_url }}" alt="Image of {{ sp_info.nome | default('sp_info') }}" class="img-fluid" style="max-width: 100%; height: auto; margin: 10px 0;">
@@ -42,7 +42,7 @@
                 <button type="button" {% if sp_info.user_type != 'pf' %}disabled{% endif %}>Denúncia</button>
             </a>
             
-            <a href="/gerar-relatorio/{{ sp_info.waterbody.id }}" class="{% if sp_info.user_type != 'pj' %}disabled{% endif %}">
+            <a href="{{ url_for('waterbody.create_report', waterbody_id = sp_info.waterbody.id) }}" class="{% if sp_info.user_type != 'pj' %}disabled{% endif %}">
                 <button type="button" {% if sp_info.user_type != 'pj' %}disabled{% endif %}>Gerar Relatório</button>
             </a>
             
@@ -51,7 +51,7 @@
             </a>
             
             <a href="/acoes/{{ sp_info.waterbody.id }}" class="{% if sp_info.user_type != 'pj' %}disabled{% endif %}">
-                <button type="button" {% if sp_info.user_type != 'pj' %}disabled{% endif %}>Ações</button>
+                <button type="button" {% if sp_info.user_type != 'pj' %}disabled{% endif %}>Gerar Ação</button>
             </a>
         </div>
     </div>

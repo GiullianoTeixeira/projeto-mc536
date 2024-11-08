@@ -2,6 +2,8 @@ from flask import *
 from flask_login import *
 from . import model, db
 from functools import wraps
+from . import groq_integragtion
+from datetime import datetime
 
 def role_required(role: model.UserRole):
     def has_role(user: model.User, role: model.UserRole) -> bool:
@@ -93,3 +95,22 @@ def complaint(id):
     complaint = model.get_complaint(db.get_db(), id)
     
     return render_template('complaint.html', complaint=complaint)
+
+@bp.route('/create_report', methods=['GET'])
+def create_report():
+    waterbody_id = request.args.get('waterbody_id')
+    waterbody = model.get_waterbody_by_id(db.get_db(), waterbody_id)
+
+    attempts = 5
+    while attempts > 0:
+        try:
+            result = groq_integragtion.get_report(waterbody.name)
+            report = model.Report(-1, current_user.id, datetime.now(), waterbody.id, result['text'], result['pH'], result['indiceBiodiversidade'])
+            model.create_report(db.get_db(), report)
+            break
+        except Exception as e:
+            attempts -= 1
+            if attempts == 0:
+                return jsonify({'success': False, 'error': str(e)})
+
+    return waterbody_super_page(waterbody_id)

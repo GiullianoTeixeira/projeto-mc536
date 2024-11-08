@@ -430,3 +430,14 @@ def get_user_type_by_id(db, user_id):
     if result:
         return result['tipo'] 
     return None 
+
+def create_report(db, report: Report):
+    cursor = db.cursor()
+    cursor.execute("""
+        INSERT INTO Relatorio
+        (entidadeEmissora, datahora, corpoReferente, texto, pH, indiceBiodiversidade) 
+        VALUES (%s, %s, %s, %s, %s, %s)
+    """, (report.issuing_entity, report.datetime, report.referenced_waterbody, report.text, report.pH, report.biodiversity_index))
+    
+    db.commit()
+    cursor.close()
