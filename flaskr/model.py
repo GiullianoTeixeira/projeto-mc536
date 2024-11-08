@@ -441,3 +441,14 @@ def create_report(db, report: Report):
     
     db.commit()
     cursor.close()
+
+def create_action_proposal(db, solution: Solution):
+    cursor = db.cursor()
+    cursor.execute("""
+        INSERT INTO Solucao
+        (entidadeEmissora, corpoReferente, orcamento, descricao) 
+        VALUES (%s, %s, %s, %s)
+    """, (solution.issuing_entity, solution.referenced_waterbody , solution.budget, solution.description))
+
+    db.commit()
+    cursor.close()
