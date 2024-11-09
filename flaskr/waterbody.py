@@ -115,6 +115,25 @@ def create_report():
 
     return waterbody_super_page(waterbody_id)
 
+@bp.route('/create_action_proposal', methods=['GET'])
+def create_action_proposal():
+    waterbody_id = request.args.get('waterbody_id')
+    waterbody = model.get_waterbody_by_id(db.get_db(), waterbody_id)
+
+    attempts = 5
+    while attempts > 0:
+        try:
+            result = groq_integragtion.get_action_proposal(waterbody.name)
+            solution = model.Solution(-1, current_user.id, waterbody.id, result['budget'], result['text'])
+            model.create_action_proposal(db.get_db(), solution)
+            break
+        except Exception as e:
+            attempts -= 1
+            if attempts == 0:
+                return jsonify({'success': False, 'error': str(e)})
+
+    return waterbody_super_page(waterbody_id)
+
 @bp.route('/create_simulation', methods=['GET'])
 def create_simulation():
     waterbody_id = request.args.get('waterbody_id')
@@ -138,5 +157,4 @@ def create_simulation():
             attempts -= 1
             if attempts == 0:
                 return jsonify({'success': False, 'error': str(e)})
-
     return waterbody_super_page(waterbody_id)

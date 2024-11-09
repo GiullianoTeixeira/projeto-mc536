@@ -442,6 +442,17 @@ def create_report(db, report: Report):
     db.commit()
     cursor.close()
 
+def create_action_proposal(db, solution: Solution):
+    cursor = db.cursor()
+    cursor.execute("""
+        INSERT INTO Solucao
+        (entidadeEmissora, corpoReferente, orcamento, descricao) 
+        VALUES (%s, %s, %s, %s)
+    """, (solution.issuing_entity, solution.referenced_waterbody , solution.budget, solution.description))
+
+    db.commit()
+    cursor.close()
+
 def create_simulation(db, simulation: Simulation):
     cursor = db.cursor()
     cursor.execute("""
@@ -450,6 +461,5 @@ def create_simulation(db, simulation: Simulation):
         VALUES (%s, %s, %s, %s)
     """, (simulation.issuing_entity, simulation.referenced_waterbody, simulation.severity, simulation.description))
 
-    print("here")
     db.commit()
     cursor.close()
