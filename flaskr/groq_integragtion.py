@@ -1,14 +1,8 @@
-import requests
 from groq import *
 import json
-import gradio as gr
 from langchain_groq import ChatGroq
-from langchain_core.tools import tool
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
+from langchain_core.messages import HumanMessage, SystemMessage
 import dotenv
-import os
-
-from deep_translator import GoogleTranslator
 
 dotenv.load_dotenv()
 

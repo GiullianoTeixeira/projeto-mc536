@@ -1,3 +1,9 @@
 flask
 flask-mysql
+mysql-connector-python
+flask_login
 jsonify
+groq
+langchain-groq
+python-dotenv
+colorama

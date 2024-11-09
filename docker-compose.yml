@@ -1,0 +1,19 @@
+services:
+  aquadata:
+    build: .
+    links:
+      - mysql
+    ports:
+      - "5000:5000"
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: aquadata
+      MYSQL_USER: aquadata
+      MYSQL_PASSWORD: aquadata
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d/:ro
