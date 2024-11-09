@@ -87,7 +87,7 @@ class Report:
 
 class WaterBodySuperPage:
     def __init__(self, waterbody: WaterBody, complaints: list[list[int, datetime]], reports: list[list[int, datetime]],
-                 biodiversity_media_index, ph_stats, complaints_by_severity, user_type, simulations, solutions):
+                 biodiversity_media_index, ph_stats, complaints_by_severity, user_type, simulations, solutions: list[list[int, datetime]]):
         self.waterbody = waterbody
         self.complaints = complaints
         self.reports = reports
@@ -270,22 +270,56 @@ def get_complaint(db, id):
     return complaint
 
 def get_simulations_by_waterbody(db, body_id):
-    cursor = db.cursor()
-    cursor.execute('SELECT * FROM Simulacao WHERE corpoReferente = %s', (body_id,))
+    cursor = db.cursor(dictionary=True)
+    # cursor.execute('SELECT * FROM Simulacao WHERE corpoReferente = %s', (body_id,))
+    cursor.execute("""
+        SELECT
+            si.id AS 'id',
+            pj.razaoSocial AS 'Entidade Emissora',
+            si.corpoReferente AS 'Corpo Referente',
+            si.severidade AS 'Severidade',
+            si.descricao AS 'Texto'
+        FROM
+            Simulacao si
+        JOIN
+            PessoaJuridica pj ON si.entidadeEmissora = pj.cnpj
+        JOIN
+            CorpoAgua ca ON si.corpoReferente = ca.id
+        WHERE
+            ca.id = %s;
+    """, (body_id,))
+
     simulations = cursor.fetchall()
     print(Fore.YELLOW + cursor.statement)
     cursor.close()
 
-    return [Simulation(*simulation) for simulation in simulations]
+    return simulations
 
 def get_solutions_by_waterbody(db, body_id):
-    cursor = db.cursor()
-    cursor.execute('SELECT * FROM Solucao WHERE corpoReferente = %s', (body_id,))
+    cursor = db.cursor(dictionary=True)
+    # cursor.execute('SELECT * FROM Solucao WHERE corpoReferente = %s', (body_id,))
+    cursor.execute("""
+        SELECT
+            s.id AS 'id',
+            pj.razaoSocial AS 'Entidade Emissora',
+            s.corpoReferente AS 'Corpo Referente',
+            s.orcamento AS 'Orcamento',
+            s.descricao AS 'Texto'
+        FROM
+            Solucao s
+        JOIN
+            PessoaJuridica pj ON s.entidadeEmissora = pj.cnpj
+        JOIN
+            CorpoAgua ca ON s.corpoReferente = ca.id
+        WHERE
+            ca.id = %s;
+    """, (body_id,))
+    
     solutions = cursor.fetchall()
     print(Fore.YELLOW + cursor.statement)
     cursor.close()
 
-    return [Solution(*solution) for solution in solutions]
+    return solutions
 
 def get_waterbodydata_by_id(db, waterbody_id):
     waterbody = get_waterbody_by_id(db, waterbody_id)
