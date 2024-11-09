@@ -50,8 +50,8 @@
                 <button type="button" {% if sp_info.user_type != 'pj' %}disabled{% endif %}>Simular</button>
             </a>
             
-            <a href="/acoes/{{ sp_info.waterbody.id }}" class="{% if sp_info.user_type != 'pj' %}disabled{% endif %}">
-                <button type="button" {% if sp_info.user_type != 'pj' %}disabled{% endif %}>Gerar Ação</button>
+            <a href="{{ url_for('waterbody.create_action_proposal', waterbody_id = sp_info.waterbody.id) }}" class="{% if sp_info.user_type != 'pj' %}disabled{% endif %}">
+                <button type="button" {% if sp_info.user_type != 'pj' %}disabled{% endif %}>Ações</button>
             </a>
         </div>
     </div>
