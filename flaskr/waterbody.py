@@ -133,3 +133,28 @@ def create_action_proposal():
                 return jsonify({'success': False, 'error': str(e)})
 
     return waterbody_super_page(waterbody_id)
+
+@bp.route('/create_simulation', methods=['GET'])
+def create_simulation():
+    waterbody_id = request.args.get('waterbody_id')
+    event = request.args.get('event')
+
+    if not waterbody_id or not event:
+        return jsonify({'success': False, 'error': 'Waterbody ID and event type are required.'})
+
+    # Fetch the waterbody details
+    waterbody = model.get_waterbody_by_id(db.get_db(), waterbody_id)
+
+    attempts = 5
+    while attempts > 0:
+        try:
+            # Use the user-provided event type
+            result = groq_integragtion.get_simulation(waterbody.name, event)
+            report = model.Simulation(-1, current_user.id, waterbody.id, result['severity'], result['text'])
+            model.create_simulation(db.get_db(), report)
+            break
+        except Exception as e:
+            attempts -= 1
+            if attempts == 0:
+                return jsonify({'success': False, 'error': str(e)})
+    return waterbody_super_page(waterbody_id)

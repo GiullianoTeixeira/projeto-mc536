@@ -8,6 +8,8 @@ from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, Tool
 import dotenv
 import os
 
+from deep_translator import GoogleTranslator
+
 dotenv.load_dotenv()
 
 MODEL = 'llama-3.1-70b-versatile'
@@ -63,7 +65,7 @@ def get_action_proposal(river_name):
     result = run_conversation(f"Generate an ACTION PROPOSAL for the {river_name}")
     result = result[result.find("{"):result.rfind("}")+1]
     result = ''.join(c for c in result if c.isprintable())
-    
+
     return json.loads(result)
 
 if __name__ == "__main__":
@@ -75,3 +77,5 @@ if __name__ == "__main__":
 
     result = get_action_proposal("Amazon River")
     print(result)
+
+

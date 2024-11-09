@@ -452,3 +452,14 @@ def create_action_proposal(db, solution: Solution):
 
     db.commit()
     cursor.close()
+
+def create_simulation(db, simulation: Simulation):
+    cursor = db.cursor()
+    cursor.execute("""
+        INSERT INTO Simulacao
+        (entidadeEmissora, corpoReferente, severidade, descricao) 
+        VALUES (%s, %s, %s, %s)
+    """, (simulation.issuing_entity, simulation.referenced_waterbody, simulation.severity, simulation.description))
+
+    db.commit()
+    cursor.close()
