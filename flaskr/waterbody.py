@@ -150,8 +150,8 @@ def create_simulation():
         try:
             # Use the user-provided event type
             result = groq_integragtion.get_simulation(waterbody.name, event)
-            report = model.Simulation(-1, current_user.id, waterbody.id, result['severity'], result['text'])
-            model.create_simulation(db.get_db(), report)
+            simulation = model.Simulation(-1, current_user.id, waterbody.id, result['severity'], result['text'])
+            model.create_simulation(db.get_db(), simulation)
             break
         except Exception as e:
             attempts -= 1
