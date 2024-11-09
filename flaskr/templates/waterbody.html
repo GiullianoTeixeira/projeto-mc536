@@ -46,7 +46,7 @@
                 <button type="button" {% if sp_info.user_type != 'pj' %}disabled{% endif %}>Gerar Relatório</button>
             </a>
             
-            <a href="/simular/{{ sp_info.waterbody.id }}" class="{% if sp_info.user_type != 'pj' %}disabled{% endif %}">
+            <a href="javascript:void(0)" onclick="createSimulation({{ sp_info.waterbody.id }});" class="{% if sp_info.user_type != 'pj' %}disabled{% endif %}">
                 <button type="button" {% if sp_info.user_type != 'pj' %}disabled{% endif %}>Simular</button>
             </a>
             
@@ -142,5 +142,23 @@
             {% endfor %}
         </table>
     </div>
+
+    <script>
+        function createSimulation(waterbodyId) {
+            if (!waterbodyId) {
+                alert("Invalid waterbody ID.");
+                return;
+            }
+    
+            const event = prompt("Enter the event type (e.g., tsunami):");
+            
+            print("heeeeeeeeeere")
+            if (event) {
+                window.location.href = `/create_simulation?waterbody_id=${waterbodyId}&event=${encodeURIComponent(event)}`;
+            } else {
+                alert("Event type is required to run the simulation.");
+            }
+        }
+    </script>
 </body>
 </html>
