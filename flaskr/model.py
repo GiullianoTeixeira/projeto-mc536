@@ -176,9 +176,9 @@ def get_user_password(db, id) -> str:
 def create_user(db, user):
     cursor = db.cursor()
     cursor.execute('INSERT INTO Usuario (id, senha, tipo) VALUES (%s, %s, %s)', (user.id, user.password, user.type))
-    if user.type == 'PF':
+    if user.type == 'pf':
         cursor.execute('INSERT INTO PessoaFisica (cpf, nome, data_nasc) VALUES (%s, %s, %s)', (user.id, user.name, user.date_of_birth))
-    elif user.type == 'PJ':
+    elif user.type == 'pj':
         cursor.execute('INSERT INTO PessoaJuridica (cnpj, razaoSocial, representante, isOrgaoGovernamental) VALUES (%s, %s, %s, %s)', (user.id, user.razao_social, user.representative, user.is_govt))
 
     db.commit()
@@ -497,3 +497,20 @@ def create_simulation(db, simulation: Simulation):
 
     db.commit()
     cursor.close()
+
+
+## DEBUG:
+def get_all_users(db):
+    cursor = db.cursor()
+    cursor.execute('SELECT * FROM Usuario')
+    users = cursor.fetchall()
+    
+    cursor.execute('SELECT * FROM PessoaFisica')
+    users_pf = cursor.fetchall()
+
+    cursor.execute('SELECT * FROM PessoaJuridica')
+    users_pj = cursor.fetchall()
+
+    cursor.close()
+
+    return [User(*user) for user in users], [UserPF(*user) for user in users_pf], [UserPJ(*user) for user in users_pj]
