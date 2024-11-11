@@ -106,6 +106,7 @@ def create_report():
         try:
             result = groq_integragtion.get_report(waterbody.name)
             report = model.Report(-1, current_user.id, datetime.now(), waterbody.id, result['text'], result['pH'], result['indiceBiodiversidade'])
+            print(report)
             model.create_report(db.get_db(), report)
             break
         except Exception as e:

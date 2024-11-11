@@ -7,7 +7,7 @@ services:
       - "5000:5000"
 
   mysql:
-    image: mysql:5.7
+    image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: aquadata
@@ -16,4 +16,5 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - ./sql:/docker-entrypoint-initdb.d/:ro
+      - ./mysql:/docker-entrypoint-initdb.d/:ro
+      - ./mysql/mysql.cnf:/etc/mysql/conf.d/my.cnf

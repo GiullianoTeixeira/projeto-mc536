@@ -51,7 +51,7 @@
             </a>
             
             <a href="{{ url_for('waterbody.create_action_proposal', waterbody_id = sp_info.waterbody.id) }}" class="{% if sp_info.user_type != 'pj' %}disabled{% endif %}">
-                <button type="button" {% if sp_info.user_type != 'pj' %}disabled{% endif %}>Ações</button>
+                <button type="button" {% if sp_info.user_type != 'pj' %}disabled{% endif %}>Gerar Medida de Atuação</button>
             </a>
         </div>
     </div>
@@ -118,7 +118,7 @@
         <table>
             {% for simulation in sp_info.simulations %}
             <tr>
-                <td><a href="{{ url_for('waterbody.simulation', simulation_id=simulation['id']) }}">Simulação #{{ simulation['id'] }}</a> (Emitido por {{ simulation['Entidade Emissora'] }})</td>
+                <td><a href="{{ url_for('waterbody.simulation', simulation_id=simulation['id']) }}">Simulação #{{ simulation['id'] }}</a></td>
             </tr>
             {% endfor %}
         </table>
@@ -137,7 +137,7 @@
         <table>
             {% for solution in sp_info.solutions %}
             <tr>
-                <td><a href="{{ url_for('waterbody.solution', solution_id=solution['id']) }}">Medida #{{ solution['id'] }}</a> (Emitido por {{ solution['Entidade Emissora'] }})</td>
+                <td><a href="{{ url_for('waterbody.solution', solution_id=solution['id']) }}">Medida #{{ solution['id'] }}</a></td>
             </tr>
             {% endfor %}
         </table>

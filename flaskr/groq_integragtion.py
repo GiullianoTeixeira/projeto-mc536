@@ -31,6 +31,8 @@ SYSTEM_PROMPT = """
         "text": ACTION PROPOSAL TEXT (string, 2 - 3 paragraphs),
         "budget": BUDGET (float, 0 - 1000000)
     }
+
+    RETORNE TODOS OS TEXTOS EM PORTUGUÊS!
 """
 
 def run_conversation(user_prompt):
