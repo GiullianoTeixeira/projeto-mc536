@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Denúncia #{{ complaint.id }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
 </head>
 <body>
 
-<div class="container mt-5">
-    <h1 class="text-center mb-4">Denúncia #{{ complaint[0]}}</h1>
+<div class="container">
+    <h1 style="justify-content: center;">Denúncia #{{ complaint[0]}}</h1>
     <table class="table table-bordered">
         <tbody>
             <tr>
@@ -22,11 +23,11 @@
             </tr>
             <tr>
                 <th class="table-primary">Corpo Referente</th>
-                <td>{{ complaint[3]}}</td>
+                <td>{{ complaint[3] }}</td>
             </tr>
             <tr>
                 <th class="table-primary">Categoria</th>
-                <td>{{ complaint[4]}}</td>
+                <td>{{ complaint[4] }}</td>
             </tr>
             <tr>
                 <th class="table-primary">Severidade</th>
@@ -38,8 +39,11 @@
             </tr>
         </tbody>
     </table>
+    
+    <div style="margin-top: 10px;">
+        <button type="button" onclick="history.back()" style="margin-right: 10px;">Voltar</button>
+    </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

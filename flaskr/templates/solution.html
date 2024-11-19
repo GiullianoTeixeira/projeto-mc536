@@ -1,18 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solução #{{ solution.id }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
 </head>
 <body>
 
 <div class="container mt-5">
-    <!-- Dynamic Title for Solução -->
-    <h1 class="text-center mb-4">Solução #{{ solution.id }}</h1>
-    
-    <!-- Solução Details in a Table -->
+    <h1 class="justify-content: center;">Solução #{{ solution.id }}</h1>
     <table class="table table-bordered">
         <tbody>
             <tr>
@@ -33,8 +31,10 @@
             </tr>
         </tbody>
     </table>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <div style="margin-top: 10px;">
+        <button type="button" onclick="history.back()" style="margin-right: 10px;">Voltar</button>
+    </div>
+</div>
 </body>
 </html>
