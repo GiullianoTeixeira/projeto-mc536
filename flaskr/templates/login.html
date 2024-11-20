@@ -1,62 +1,44 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AquaData - Login</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-  <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-  <style>
-    .text-decoration-none {
-      text-decoration: none;
-    }
-    .form-label {
-      display: block;
-      margin-top: 10px;
-    }
-    .form-control {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-    }
-    #username, #password {
-      width: auto;
-      margin-top: 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaData - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
 </head>
 <body>
-  <div class="container" style="width: 30vw; display: flex; flex-direction: column;">
-    <h1 style="text-align: center;">AquaData</h1>
-    <form action="/login" method="POST" style="display: flex; flex-direction: column;">
-      <div>
-        <div style="display: flex; flex-direction: column; align-items: start;">
-          {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-              {% for category, message in messages %}
-                <p class="text-{{ category }}">{{ message }}</p>
-              {% endfor %}
-            {% endif %}
-          {% endwith %}
-          
-          <label for="username" class="form-label">Usuário</label>
-          <input type="text" name="username" class="form-control" id="username" placeholder="Insira seu usuário" value="{{ request.form.username }}">
+    <div class="container" style="width: 30vw; display: flex; flex-direction: column;">
+        <h1 style="text-align: center;">AquaData</h1>
+        <form action="/login" method="POST" style="display: flex; flex-direction: column;">
+            <div>
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <p class="text-{{ category }}">{{ message }}</p>
+                            {% endfor %}
+                        {% endif %}
+                  {% endwith %}
+                  
+                    <label for="username" class="form-label">Usuário</label>
+                    <input type="text" name="username" class="form-control" id="username" placeholder="Insira seu usuário" value="{{ request.form.username }}">
+                </div>
+
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <label for="password" class="form-label">Senha</label>
+                    <input type="password" name="password" class="form-control" id="password" placeholder="Insira sua senha" value="{{ request.form.password }}">
+                </div>
+            </div>
+
+            <div style="margin-top: 10px;">
+                <button type="submit">Login</button>
+            </div>
+        </form>
+
+        <div style="width: 100%; text-align: center; margin-top: 10px;">
+            <a href="{{ url_for('auth.register') }}">Criar conta</a>
         </div>
-
-        <div style="display: flex; flex-direction: column; align-items: start;">
-          <label for="password" class="form-label">Senha</label>
-          <input type="password" name="password" class="form-control" id="password" placeholder="Insira sua senha" value="{{ request.form.password }}">
-        </div>
-      </div>
-
-      <div style="margin-top: 10px;">
-        <button type="submit">Login</button>
-      </div>
-    </form>
-
-    <div style="width: 100%; text-align: center; margin-top: 10px;">
-      <a href="{{ url_for('auth.register') }}" class="text-decoration-none">Criar conta</a>
     </div>
-  </div>
 </body>
 </html>
