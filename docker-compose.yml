@@ -10,7 +10,9 @@ services:
   mysql:
     image: mysql
     environment:
-      LANG: C.UTF-8
+      LANG: pt_BR.UTF-8
+      LANGUAGE: pt_BR:pt
+      LC_ALL: pt_BR.UTF-8
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: aquadata
       MYSQL_USER: aquadata
