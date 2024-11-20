@@ -9,7 +9,7 @@ body {
     padding: 20px;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4, h5, h6 {
     color: #007f8c;
 }
 
@@ -18,32 +18,8 @@ a.disabled {
     opacity: 0.6;
 }
 
-.container {
-    width: 90%;
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.buttons {
-    display: flex;
-    justify-content: space-around;
-    gap: 10px;
-}
-
-.inline {
-    display: inline
-}
-
-#right {
-    float: right;
-}
-
 button {
+    font-family: "Poppins";
     background-color: #007f8c;
     color: white;
     border: none;
@@ -59,15 +35,6 @@ button:hover {
 button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
-}
-
-.scrollable {
-    max-height: 300px;
-    overflow-y: auto;
-}
-
-.scrollable h2, .scrollable h3 {
-    color: #0a9396;
 }
 
 table {
@@ -95,8 +62,75 @@ hr {
     color:#005f73;
 }
 
+form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+input {
+    font-family: "Poppins";
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.container {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+.inline {
+    display: inline
+}
+
+.scrollable {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.scrollable h2, .scrollable h3 {
+    color: #0a9396;
+}
+
 .container p {
     margin-top: 10px;
     font-style: italic;
     color: #555;
+}
+
+.text-decoration-none {
+    text-decoration: none;
+}
+.form-label {
+    display: block;
+    margin-top: 10px;
+}
+.form-control {
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+#right {
+    float: right;
+}
+
+#username, #password, #cpf, #passwordPF, #name, #dob, #cnpj, #passwordPJ, #razaoSocial, #representante {
+    width: auto;
+    margin-top: 10px;
 }
