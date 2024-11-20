@@ -1,5 +1,6 @@
 services:
   aquadata:
+    tty: true
     build: .
     links:
       - mysql
@@ -9,6 +10,7 @@ services:
   mysql:
     image: mysql
     environment:
+      LANG: C.UTF-8
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: aquadata
       MYSQL_USER: aquadata

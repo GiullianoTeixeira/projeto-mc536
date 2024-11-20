@@ -2,8 +2,11 @@ import os
 from flask import *
 from dotenv import load_dotenv
 from . import db, auth, waterbody, search
+from colorama import init
 
+init(autoreset=False)
 load_dotenv()
+
 def create_app(test_config=None):
     
     # create and configure the app

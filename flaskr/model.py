@@ -245,7 +245,7 @@ def send_complaint_form(db, complaint):
         (denunciante, datahora, corpoReferente, categoria, severidade, descricao) 
         VALUES (%s, %s, %s, %s, %s, %s)
     """, (complaint.complainer, complaint.date_time, complaint.waterbody.id, complaint.category, complaint.severity, complaint.description))
-    
+    print(Fore.YELLOW + cursor.statement)
     db.commit()
     cursor.close()
 
@@ -264,7 +264,7 @@ def get_complaint(db, id):
     cursor = db.cursor()
     cursor.execute("SELECT * FROM Denuncia WHERE id = %s", (id,))
     complaint = cursor.fetchone()
-
+    print(Fore.YELLOW + cursor.statement)
     cursor.close()
     
     return complaint
@@ -357,7 +357,7 @@ def get_complaints_by_waterbody(db, body_id):
     """, (body_id,))
     
     complaints = cursor.fetchall()
-
+    print(Fore.YELLOW + cursor.statement)
     cursor.close()
     
     return complaints
@@ -384,7 +384,7 @@ def get_reports_by_waterbody(db, body_id):
     """, (body_id,))
     
     reports = cursor.fetchall()
-
+    print(Fore.YELLOW + cursor.statement)
     cursor.close() 
     
     return reports 
@@ -405,8 +405,9 @@ def get_biodiversity_media_index(db, body_id):
             ca.nome;
     """, (body_id,))
     average = cursor.fetchone()
-
+    print(Fore.YELLOW + cursor.statement)
     cursor.close()
+
     return average  
 
 def get_ph_statistics(db, body_id):
@@ -427,8 +428,9 @@ def get_ph_statistics(db, body_id):
             ca.nome;
     """, (body_id,))
     ph_stats = cursor.fetchone()
-
+    print(Fore.YELLOW + cursor.statement)
     cursor.close()
+
     return ph_stats 
 
 def get_complaints_by_severity(db, body_id):
@@ -448,8 +450,9 @@ def get_complaints_by_severity(db, body_id):
             d.severidade, ca.nome;
     """, (body_id,))
     severidade_counts = cursor.fetchall()
-
+    print(Fore.YELLOW + cursor.statement)
     cursor.close()
+
     return severidade_counts
 
 def get_user_type_by_id(db, user_id):
@@ -472,7 +475,7 @@ def create_report(db, report: Report):
         (entidadeEmissora, datahora, corpoReferente, texto, pH, indiceBiodiversidade) 
         VALUES (%s, %s, %s, %s, %s, %s)
     """, (report.issuing_entity, report.datetime, report.referenced_waterbody, report.text, report.pH, report.biodiversity_index))
-    
+    print(Fore.YELLOW + cursor.statement)
     db.commit()
     cursor.close()
 
@@ -483,7 +486,7 @@ def create_action_proposal(db, solution: Solution):
         (entidadeEmissora, corpoReferente, orcamento, descricao) 
         VALUES (%s, %s, %s, %s)
     """, (solution.issuing_entity, solution.referenced_waterbody , solution.budget, solution.description))
-
+    print(Fore.YELLOW + cursor.statement)
     db.commit()
     cursor.close()
 
@@ -494,7 +497,7 @@ def create_simulation(db, simulation: Simulation):
         (entidadeEmissora, corpoReferente, severidade, descricao) 
         VALUES (%s, %s, %s, %s)
     """, (simulation.issuing_entity, simulation.referenced_waterbody, simulation.severity, simulation.description))
-
+    print(Fore.YELLOW + cursor.statement)
     db.commit()
     cursor.close()
 
