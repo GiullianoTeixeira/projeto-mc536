@@ -87,7 +87,6 @@
     </div>
 
 
-    {% if sp_info.user_type == 'pj' %}
     <div class="container scrollable">
         <h2>Histórico de relatórios</h2>
         {% if sp_info.reports|length > 0 %}
@@ -104,9 +103,7 @@
             {% endfor %}
         </table>
     </div>
-    {% endif %}
 
-    {% if sp_info.user_type == 'pj' %}
     <div class="container scrollable">
         <h2>Histórico de simulações</h2>
         {% if sp_info.simulations|length > 0 %}
@@ -123,8 +120,6 @@
             {% endfor %}
         </table>
     </div>
-    {% endif %}
-
 
     <div class="container scrollable">
         <h2>Medidas implementadas</h2>
@@ -142,6 +137,13 @@
             {% endfor %}
         </table>
     </div>
+
+
+    <!-- FIXME: <div style="margin-top: 10px; justify-content: center;">
+        <a href="{{ url_for('search.html') }}">
+            <button type="button" style="margin-right: 10px;">Voltar para busca de rios</button>
+        </a>
+    </div> -->
 
     <script>
         function createSimulation(waterbodyId) {
