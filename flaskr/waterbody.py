@@ -96,8 +96,7 @@ def complaint_form(waterbody_id):
 def complaint(id):
     complaint = model.get_complaint(db.get_db(), id)
     
-    user = current_user.id
-    username = model.get_typed_user_by_id(db.get_db(), user).name
+    username = model.get_typed_user_by_id(db.get_db(), complaint[1]).name
     
     return render_template('complaint.html', complaint=complaint, username=username)
 
