@@ -9,24 +9,24 @@
 </head>
 <body>
 
-<div class="container mt-5">
-    <h1 class="justify-content: center;">Solução #{{ solution.id }}</h1>
-    <table class="table table-bordered">
+<div class="container">
+    <h1 style="justify-content: center;">Solução #{{ solution.id }}</h1>
+    <table>
         <tbody>
             <tr>
-                <th class="table-primary">Entidade Emissora</th>
+                <th>Entidade Emissora</th>
                 <td>{{ solution.issuing_entity }}</td>
             </tr>
             <tr>
-                <th class="table-primary">Corpo Referente</th>
+                <th>Corpo Referente</th>
                 <td>{{ solution.referenced_waterbody }}</td>
             </tr>
             <tr>
-                <th class="table-primary">Orçamento</th>
+                <th>Orçamento</th>
                 <td>{{ solution.budget }}</td>
             </tr>
             <tr>
-                <th class="table-primary">Descrição</th>
+                <th>Descrição</th>
                 <td>{{ solution.description }}</td>
             </tr>
         </tbody>
