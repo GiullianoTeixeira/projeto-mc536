@@ -11,6 +11,7 @@
 > Website para coleta e análise de dados referentes a corpos d'água, a fim de ser uma ferramenta para a preservação dos recursos hídricos terrestres.
 
 ## 🚀 Instruções de Execução
+<img src="https://www.docker.com/wp-content/uploads/2023/08/logo-guide-logos-2.svg">
 ### Com DOCKER:
 Instruções de execução: https://www.youtube.com/watch?v=HYpN88ZiOu4
 1. Clone o repositório
