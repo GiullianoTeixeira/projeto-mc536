@@ -25,9 +25,9 @@
         <h2>Estatísticas de pH</h2>
         {% if sp_info.ph_stats %}
             <ul>
-                <li>pH Mínimo: {{ sp_info.ph_stats['pH Mínimo'] }}</li>
-                <li>pH Médio: {{ sp_info.ph_stats['pH Médio'] }}</li>
-                <li>pH Máximo: {{ sp_info.ph_stats['pH Máximo'] }}</li>
+                <li>pH Mínimo: {{ "%.2f"|format(sp_info.ph_stats['pH Mínimo']) }}</li>
+                <li>pH Médio: {{ "%.2f"|format(sp_info.ph_stats['pH Médio']) }}</li>
+                <li>pH Máximo: {{ "%.2f"|format(sp_info.ph_stats['pH Máximo']) }}</li>
             </ul>
         {% else %}
             <p>Indisponível.</p>
