@@ -1,4 +1,6 @@
 # Aquadata
+<img src="img/logo.webp" alt="Exemplo imagem">
+
 
 ## Instruções de execução
 ### Com DOCKER:
