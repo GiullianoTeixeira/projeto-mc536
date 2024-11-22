@@ -87,14 +87,14 @@ class Report:
 
 class WaterBodySuperPage:
     def __init__(self, waterbody: WaterBody, complaints: list[list[int, datetime]], reports: list[list[int, datetime]],
-                 biodiversity_media_index, ph_stats, complaints_by_severity, user_type, simulations, solutions: list[list[int, datetime]]):
+                 biodiversity_media_index, ph_stats, complaints_by_severity, typed_user, simulations, solutions: list[list[int, datetime]]):
         self.waterbody = waterbody
         self.complaints = complaints
         self.reports = reports
         self.biodiversity_media_index = biodiversity_media_index
         self.ph_stats = ph_stats
         self.complaints_by_severity = complaints_by_severity
-        self.user_type = user_type
+        self.typed_user = typed_user
         self.simulations = simulations
         self.solutions = solutions
     
@@ -254,9 +254,10 @@ def create_waterbody_super_page(db, waterbody_id):
         waterbody, complaints, reports, biodiversity_media_index, ph_stats, complaints_by_severity, simulations, solutions
     ) = get_waterbodydata_by_id(db, waterbody_id)
     
-    user_type = get_user_type_by_id(db, current_user.id)
+    # user_type = get_user_type_by_id(db, current_user.id)
+    typed_user = get_typed_user_by_id(db, current_user.id)
     
-    waterbody_super_page = WaterBodySuperPage(waterbody, complaints, reports, biodiversity_media_index, ph_stats, complaints_by_severity, user_type, simulations, solutions)
+    waterbody_super_page = WaterBodySuperPage(waterbody, complaints, reports, biodiversity_media_index, ph_stats, complaints_by_severity, typed_user, simulations, solutions)
     
     return waterbody_super_page
 

@@ -38,20 +38,20 @@
         <h2>Ações</h2>
         <br>
         <div class="buttons">
-            <a href="{{ url_for('waterbody.complaint_form', waterbody_id = sp_info.waterbody.id) }}" class="{% if sp_info.user_type != 'pf' %}disabled{% endif %}">
-                <button type="button" {% if sp_info.user_type != 'pf' %}disabled{% endif %}>Denúncia</button>
+            <a href="{{ url_for('waterbody.complaint_form', waterbody_id = sp_info.waterbody.id) }}" class="{% if sp_info.typed_user.type != 'pf' %}disabled{% endif %}">
+                <button type="button" {% if sp_info.typed_user.type != 'pf' %}disabled{% endif %}>Denúncia</button>
             </a>
             
-            <a href="{{ url_for('waterbody.create_report', waterbody_id = sp_info.waterbody.id) }}" class="{% if sp_info.user_type != 'pj' %}disabled{% endif %}">
-                <button type="button" {% if sp_info.user_type != 'pj' %}disabled{% endif %}>Gerar Relatório</button>
+            <a href="{{ url_for('waterbody.create_report', waterbody_id = sp_info.waterbody.id) }}" class="{% if sp_info.typed_user.type != 'pj' %}disabled{% endif %}">
+                <button type="button" {% if sp_info.typed_user.type != 'pj' %}disabled{% endif %}>Gerar Relatório</button>
             </a>
             
-            <a href="javascript:void(0)" onclick="createSimulation({{ sp_info.waterbody.id }});" class="{% if sp_info.user_type != 'pj' %}disabled{% endif %}">
-                <button type="button" {% if sp_info.user_type != 'pj' %}disabled{% endif %}>Simular</button>
+            <a href="javascript:void(0)" onclick="createSimulation({{ sp_info.waterbody.id }});" class="{% if sp_info.typed_user.type != 'pj' %}disabled{% endif %}">
+                <button type="button" {% if sp_info.typed_user.type != 'pj' %}disabled{% endif %}>Simular</button>
             </a>
             
-            <a href="{{ url_for('waterbody.create_action_proposal', waterbody_id = sp_info.waterbody.id) }}" class="{% if sp_info.user_type != 'pj' %}disabled{% endif %}">
-                <button type="button" {% if sp_info.user_type != 'pj' %}disabled{% endif %}>Gerar Medida de Atuação</button>
+            <a href="{{ url_for('waterbody.create_action_proposal', waterbody_id = sp_info.waterbody.id) }}" class="{% if not (sp_info.typed_user.type == 'pj' and sp_info.typed_user.is_govt) %}disabled{% endif %}">
+                <button type="button" {% if not (sp_info.typed_user.type == 'pj' and sp_info.typed_user.is_govt) %}disabled{% endif %}>Gerar Medida de Atuação</button>
             </a>
         </div>
     </div>
