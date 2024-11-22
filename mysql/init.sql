@@ -80,7 +80,7 @@ ALTER TABLE
 
 -- POPULATE:
 INSERT INTO CorpoAgua (`id`, `nome`, `coordenadas`, `imagemUrl`) VALUES
-(1, 'Rio Tietê', '-22.126302,-48.754388', 'https://upload.wikimedia.org/wikipedia/commons/1/16/Rio_Tiet%C3%AA_Barra_Bonita_150606_REFON.jpg'),
+(1, 'Rio Tietê', '-23.514992, -46.668964', 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Marginal_tiet%C3%AA.jpg/1920px-Marginal_tiet%C3%AA.jpg'),
 (2, 'Rio Amazonas', '-3.065229,-59.795789', 'https://s4.static.brasilescola.uol.com.br/be/2022/05/floresta-amazonica-rio-amazonas.jpg'),
 (3, 'Rio Iguaçu', '-26.0061431,-51.8780114', 'https://lh5.googleusercontent.com/p/AF1QipOu0Lnr8_gaQ-9RCq2kzkRHWvkYLltSjTxLkQpC=w408-h244-k-no'),
 (4, 'Rio Paraná', '-27.0692753,-61.2049704', 'https://lh5.googleusercontent.com/p/AF1QipN2VwqDBOHBaaHAxuDdU5KF6OzYO61KjjYhMU6m=w408-h306-k-no'),
@@ -111,10 +111,12 @@ INSERT INTO `Denuncia` (`denunciante`, `datahora`, `corpoReferente`, `categoria`
 
 INSERT INTO `Relatorio` (`entidadeEmissora`, `datahora`, `corpoReferente`, `texto`, `pH`, `indiceBiodiversidade`) VALUES
 ('12345678000100', '2024-01-02 09:00:00', 1, 'Análise da qualidade da água.', 4.5, 40),
+('23456789000100', '2024-01-02 09:00:00', 1, 'Análise da vida local.', 3.0, 25),
 ('23456789000100', '2024-01-06 12:00:00', 2, 'Relatório ambiental detalhado.', 6.8, 70),
 ('23456789000100', '2024-01-11 13:00:00', 3, 'Situação crítica do rio.', 5.5, 50),
 ('23456789000100', '2024-01-13 14:00:00', 4, 'Análise de preservação do local.', 8.2, 90),
 ('12345678000100', '2024-01-16 15:00:00', 5, 'Relatório de preservação ambiental.', 7.0, 75);
+
 
 INSERT INTO `Simulacao` (`entidadeEmissora`, `corpoReferente`, `severidade`, `descricao`) VALUES
 ('12345678000100', 1, 'medio', 'Simulação de impacto médio no Rio Tietê.'),
