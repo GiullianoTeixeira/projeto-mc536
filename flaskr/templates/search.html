@@ -42,24 +42,6 @@
         .waterbody-item h5 {
             margin: 0;
         }
-        .text-center {
-            text-align: center;
-        }
-        .text-decoration-none {
-            text-decoration: none;
-            color: inherit;
-        }
-        .btn-primary {
-            background-color: #007bff;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
         .form-control {
             flex: 1;
             width: calc(100% - 120px);
@@ -69,18 +51,18 @@
         }
         .form-control:focus {
             outline: none;
-            border-color: #007bff;
+            border-color: ##007f8c;
         }
     </style>
 </head>
 <body>
     <div class="dashboard-card">
-        <h2 class="text-center">AquaData</h2>
-        <h3 class="text-center">Busca de Rios</h3>
+        <h2 style="justify-content: center;">AquaData</h2>
+        <h3 style="justify-content: center;">Busca de Rios</h3>
         
         <form id="searchForm" method="POST" action="{{ url_for('search.search') }}">
             <input class="form-control" type="search" placeholder="Buscar rios..." aria-label="Search" name="query" id="searchInput" value="{{ query }}">
-            <button class="btn-primary" type="submit">Buscar</button>
+            <button type="submit">Buscar</button>
         </form>
 
         {% if query %}
@@ -100,7 +82,7 @@
                   </div>
                   {% endfor %}
                 {% else %}
-                    <p class="text-center">Nenhum resultado encontrado para '{{ query }}'.</p>
+                    <p style="justify-content: center;">Nenhum resultado encontrado para '{{ query }}'.</p>
                 {% endif %}
             </div>
         {% endif %}
