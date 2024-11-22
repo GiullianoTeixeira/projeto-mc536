@@ -8,8 +8,9 @@
 
 <img src="img/logo.webp" alt="Exemplo imagem">
 
+> Website para coleta e análise de dados referentes a corpos d'água, a fim de ser uma ferramenta para a preservação dos recursos hídricos terrestres.
 
-## Instruções de execução
+## 🚀 Instruções de Execução
 ### Com DOCKER:
 Instruções de execução: https://www.youtube.com/watch?v=HYpN88ZiOu4
 1. Clone o repositório
