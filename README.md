@@ -6,7 +6,7 @@
 ![Bitbucket open issues](https://img.shields.io/bitbucket/issues/GiullianoTeixeira/projeto-mc536?style=for-the-badge)
 ![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/GiullianoTeixeira/projeto-mc536?style=for-the-badge)
 
-<img src="img/logo.webp" alt="Exemplo imagem">
+<img src="static/logo.webp" alt="Exemplo imagem">
 
 > Website para coleta e análise de dados referentes a corpos d'água, a fim de ser uma ferramenta para a preservação dos recursos hídricos terrestres.
 
